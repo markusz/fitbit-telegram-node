@@ -1,0 +1,30 @@
+{
+  "name": "fitbit-telegram",
+  "version": "0.0.1",
+  "description": "minimalistic api for fitbit",
+  "main": "handler.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "telegram",
+    "fitbit",
+    "node"
+  ],
+  "author": "Markus Ziller",
+  "license": "ISC",
+  "dependencies": {
+    "eslint-config-airbnb": "^16.1.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.1",
+    "superagent": "^3.8.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-mocha": "^4.11.0"
+  }
+}
