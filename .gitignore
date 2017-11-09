@@ -5,3 +5,6 @@ jspm_packages
 # Serverless directories
 .serverless
 /credentials
+.idea/
+fitbit-telegram-node.iml
+/fitbit-telegram-node.iml
