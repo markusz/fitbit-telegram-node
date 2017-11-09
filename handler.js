@@ -1,57 +1,11 @@
 'use strict';
 
-const superagent = require('superagent');
-const moment = require('moment');
 const lodash = require('lodash');
 
-const TelegramMessage = require('./src/telegram-message').TelegramMessage;
-const TelegramApiClient = require('./src/telegram-api-client').TelegramApiClient;
-const Responses = require('./config/responses').Responses;
-const Actions = require('./config/responses').Actions;
-
-class FitBitApiClient {
-  constructor(accessToken) {
-    this.accessToken = accessToken;
-  }
-
-  generateAuthHeader() {
-    return {
-      Authorization: `Bearer ${this.accessToken}`
-    };
-  }
-
-  getUser() {
-    return superagent
-      .get('https://api.fitbit.com/1/user/-/profile.json')
-      .set(this.generateAuthHeader());
-  }
-
-  getFoodLog(dateString) {
-    const date = dateString || moment().format('YYYY-MM-DD');
-    return superagent
-      .get(`https://api.fitbit.com/1/user/-/foods/log/date/${date}.json`)
-      .set(this.generateAuthHeader());
-  }
-
-  logCaloriesForDay(dateString) {
-    const date = dateString || moment().format('YYYY-MM-DD');
-    // foodName=Kantine&date=2014-01-01&mealTypeId=5&brandName=P7S1&calories=200&amount=1.00&unitId=222
-
-    return superagent
-      .post('https://api.fitbit.com/1/user/-/foods/log.json')
-      .query({
-        brandName: 'P7S1',
-        foodName: 'Kantine',
-        date: date,
-        mealTypeId: 5,
-        calories: 200,
-        amount: 1.00,
-        unitId: 222,
-      })
-      .set(this.generateAuthHeader());
-  }
-}
-
+const { TelegramMessage } = require('./src/telegram-message');
+const { TelegramApiClient } = require('./src/telegram-api-client');
+const { FitBitApiClient } = require('./src/fitbit-api-client');
+const { Responses, Actions } = require('./config/responses');
 
 module.exports.UserProfileHandler = (event, context, callback) => {
   const fitBitApiClient = new FitBitApiClient(process.env.ACCESS_TOKEN);
@@ -71,29 +25,48 @@ module.exports.UserProfileHandler = (event, context, callback) => {
   });
 };
 
+const messageReceivedCallback = cb => (message) => {
+  console.log(message);
+  cb(null, { statusCode: 200 });
+};
+
 module.exports.TelegramMessageHandler = (event, context, callback) => {
   const message = lodash.get(JSON.parse(event.body), 'message');
-  console.log(message);
   const telegramMessage = TelegramMessage.getInstance(message);
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId());
   const fitBitApiClient = new FitBitApiClient(process.env.ACCESS_TOKEN);
 
-  const response = TelegramApiClient.getResponseForMessage(telegramMessage.getLowerCaseTextMessage());
+  const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage());
 
   console.log(telegramMessage.getLowerCaseTextMessage());
-  console.log(response);
+  console.log(queryParams);
 
-  fitBitApiClient.logCaloriesForDay('2014-01-01')
-    .then((res) => {
-      console.log(res.body);
-      const reply = !response ? 'Wat willste?' : `${response.title} -> ${res.body.foodDay.summary.calories}`;
-      telegramApiClient.replyInTelegramChat(reply).then(() => {
-        callback(null, {
-          statusCode: 200,
-          body: 'Message nicht erkannt. Keine Antwort',
-        });
-      }).catch(callback);
-    }).catch(callback);
+  // Telegram expects a HTTP200 response to acknowlege receiving the message -> One cb fits all
+  const masterCallback = messageReceivedCallback(callback);
+
+  if (!queryParams) {
+    return telegramApiClient.replyInTelegramChat('Not known')
+      .then(masterCallback)
+      .catch(masterCallback);
+  }
+
+  fitBitApiClient
+    .logFood(queryParams)
+    .then((/* logRes */) => {
+      fitBitApiClient
+        .getFoodLog()
+        .then((getLogRes) => {
+          const total = lodash.get(getLogRes, 'body.summary.calories', null);
+          const budget = lodash.get(getLogRes, 'body.goals.calories', '∞');
+
+          const reply = `Food logged. Today calories: ${total}, Remaining budget: ${budget}`;
+
+          telegramApiClient
+            .replyInTelegramChat(reply)
+            .then(masterCallback)
+            .catch(masterCallback);
+        }).catch(masterCallback);
+    }).catch(masterCallback);
 };
 
 module.exports.AddToFoodlogHandler = (event, context, callback) => {

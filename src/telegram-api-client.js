@@ -1,7 +1,7 @@
 'use strict';
 
 const superagent = require('superagent');
-const responses = require('../config/responses').Responses;
+const { ResponseProcessor } = require('../config/responses');
 
 class TelegramApiClient {
   constructor(botToken, chatId) {
@@ -23,8 +23,8 @@ class TelegramApiClient {
       });
   }
 
-  static getResponseForMessage(message) {
-    return responses.find(res => res.pattern.test(message));
+  static getQueryParamsForFoodLog(message) {
+    return ResponseProcessor.fromMessage(message).toJSON();
   }
 }
 
