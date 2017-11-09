@@ -4,22 +4,22 @@
 
 const chai = require('chai');
 const TelegramAPIClient = require('../src/telegram-api-client').TelegramApiClient;
+const ResponseProcessor = require('../config/responses').ResponseProcessor;
 
 const expect = chai.expect;
 
 describe('TelegramAPIClient', () => {
-  it('should get the correct responses for messages', () => {
-    const _ = TelegramAPIClient.getResponseForMessage;
-    expect(_('joghurt').title).to.eql('Joghurt');
-    expect(_('joghurt').title).to.eql('Joghurt');
-    expect(_('apfel').title).to.eql('Apfel');
-    expect(_('kaffee').title).to.eql('Kaffee');
-    expect(_('cappuccino').title).to.eql('Cappuccino');
-    expect(_('joghurt 10 20 30').title).to.eql('Joghurt with weights');
+  it('gets the json payload for a request to the fitbit api', () => {
+    const _ = ResponseProcessor.fromMessage;
+    expect(_('joghurt').toJSON().foodId).to.eql(537115055);
+
+    expect(_('joghurt 10 20 30').toJSON()[0].foodId).to.eql(537115055);
+    expect(_('joghurt 10 20 30').toJSON()[1].foodId).to.eql(544978453);
+    expect(_('joghurt 10 20 30').toJSON()[2].foodId).to.eql(537212681);
   });
 
   it('return null if not matched', () => {
-    const _ = TelegramAPIClient.getResponseForMessage;
-    expect(_('asdasdad')).to.eql(undefined);
+    const _ = TelegramAPIClient.getQueryParamsForFoodLog;
+    expect(_('asdasdad')).to.eql(null);
   });
 });
