@@ -2,15 +2,18 @@
 
 https://dev.fitbit.com/apps/new
 
-OAuth 2.0 Application Type: Client
-Callback URL: http://localhost
-Default Access Type: Read & Write
+OAuth 2.0 Application Type: `Client`
+
+Callback URL: `http://localhost`
+
+Default Access Type: `Read & Write`
 
 Register creates the app and gives you three values you will need
 
 ##### ClientId
 
 OAuth 2.0 Client ID
+
 `<CLIENT_ID>`
 
 ##### Call
@@ -79,4 +82,5 @@ functions:
 Open the following URL in your browser
 
 `WEBHOOK_URL` = `https://<random_string>.execute-api.eu-west-1.amazonaws.com/test/im/telegram/<SECURITY_TOKEN>`
+
 `https://api.telegram.org/bot<TELEGRAM_TOKEN>/setWebhook?url=<WEBHOOK_URL>`
