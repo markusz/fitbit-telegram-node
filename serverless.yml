@@ -5,6 +5,7 @@ provider:
   environment:
     ACCESS_TOKEN: ${env:ACCESS_TOKEN}
     TELEGRAM_API_TOKEN: ${env:TELEGRAM_API_TOKEN}
+    CHAT_ID: ${env:CHAT_ID}
   region: eu-west-1
   stage: test
   profile: fitbit
@@ -21,31 +22,15 @@ provider:
     - credentials
 
 functions:
-  getUser:
-    handler: handler.UserProfileHandler
-    events:
-      - http:
-          path: user
-          method: get
-  getFoodlog:
-    handler: handler.FoodLogHandler
-    events:
-      - http:
-          path: foodlog/{date}
-          method: get
-          request:
-            parameters:
-              paths:
-                date: true
-  addToFoodlog:
-    handler: handler.AddToFoodlogHandler
-    events:
-      - http:
-          path: foodlog
-          method: post
   receiveTelegramMessage:
     handler: handler.TelegramMessageHandler
     events:
       - http:
           path: im/telegram
           method: post
+  reminderBudgetBeforeMeal:
+    handler: handler.TelegramMealReminder
+    events:
+      - schedule: cron(55 6 * * ? *)
+      - schedule: cron(55 10 * * ? *)
+      - schedule: cron(55 17 * * ? *)
