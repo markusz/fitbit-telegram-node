@@ -17,6 +17,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
+    "moment-timezone": "^0.5.14",
     "q": "^1.5.1",
     "superagent": "^3.8.0"
   },

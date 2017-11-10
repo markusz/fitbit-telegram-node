@@ -3,7 +3,9 @@
 const FitBitUnitIds = {
   GRAMM: 147,
   UNIT: 222,
-  TASSE_240_ML: 19984
+  TASSE_240_ML: 19984,
+  TASSE_180_ML: 20480,
+  FLASCHE_500_ML: 20141,
 };
 
 const FitBitFoodIds = {
@@ -27,6 +29,7 @@ const FitBitFoodIds = {
   },
   Drinks: {
     WEISSBIER: 537128064,
+    HELLES: 537169112,
     COFFEE: 539665673,
     CAPPUCCINO: 537189105
   }

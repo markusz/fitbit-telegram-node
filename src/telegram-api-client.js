@@ -1,7 +1,7 @@
 'use strict';
 
 const superagent = require('superagent');
-const { ResponseProcessor } = require('../config/responses');
+const { ResponseProcessor } = require('../src/response-processor');
 
 class TelegramApiClient {
   constructor(botToken, chatId) {
