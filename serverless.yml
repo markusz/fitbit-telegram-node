@@ -6,6 +6,7 @@ provider:
     ACCESS_TOKEN: ${env:ACCESS_TOKEN}
     TELEGRAM_API_TOKEN: ${env:TELEGRAM_API_TOKEN}
     CHAT_ID: ${env:CHAT_ID}
+    SECURITY_TOKEN: ${env:SECURITY_TOKEN}
   region: eu-west-1
   stage: test
   profile: fitbit
@@ -26,8 +27,12 @@ functions:
     handler: handler.TelegramMessageHandler
     events:
       - http:
-          path: im/telegram
+          path: im/telegram/{token}
           method: post
+          request:
+            parameters:
+               paths:
+                 token: true
   reminderBudgetBeforeMeal:
     handler: handler.TelegramMealReminder
     events:

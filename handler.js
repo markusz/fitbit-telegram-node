@@ -33,6 +33,17 @@ module.exports.TelegramMealReminder = (event, context, callback) => {
 module.exports.TelegramMessageHandler = (event, context, callback) => {
   const message = lodash.get(JSON.parse(event.body), 'message');
   const telegramMessage = TelegramMessage.getInstance(message);
+  const token = lodash.get(event, 'pathParameters.token');
+
+  /**
+   * SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
+   * CHAT_ID ensures that only you can use the bot to log food
+   */
+  if (process.env.SECURITY_TOKEN != token || process.env.CHAT_ID != telegramMessage.getChatId()) {
+    console.error(`Request declined. token=${token}, chatId=${telegramMessage.getChatId()}`);
+    return callback(null, { statusCode: 200 });
+  }
+
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId());
   const fitBitApiClient = new FitBitApiClient(process.env.ACCESS_TOKEN);
 
