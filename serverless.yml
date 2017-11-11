@@ -7,11 +7,18 @@ provider:
     TELEGRAM_API_TOKEN: ${env:TELEGRAM_API_TOKEN}
     CHAT_ID: ${env:CHAT_ID}
     SECURITY_TOKEN: ${env:SECURITY_TOKEN}
+    CLIENT_ID: ${env:CLIENT_ID}
+    DYNAMODB_TABLE: ${file(./ressources.yml):dynamoDBTableName}
   region: eu-west-1
   stage: test
   profile: fitbit
   memorySize: 128
   timeout: 10
+  iamRoleStatements:
+  -  Effect: Allow
+     Action:
+       - dynamodb:*
+     Resource: ${file(./ressources.yml):dynamoDBARN}
 
   exclude:
     - .idea/**
@@ -39,3 +46,10 @@ functions:
       - schedule: cron(55 6 * * ? *)
       - schedule: cron(55 10 * * ? *)
       - schedule: cron(55 17 * * ? *)
+  receiveOAuthAccessToken:
+      handler: handler.FitbitOAuthResponseHandler
+      events:
+        - http:
+            path: auth/fitbit
+            method: get
+            cors: true
