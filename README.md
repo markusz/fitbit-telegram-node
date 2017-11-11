@@ -1,3 +1,41 @@
+# Fitbit-Telegram bridge
+
+![image](https://s3.eu-west-1.amazonaws.com/fitbit-telegram-bridge/ressources/IMG_2506.PNG)
+
+This is a project that allows you to log food on Fitbit by sending messages to a Telegram bot.
+
+It simplifies logging common foods by configuring your logs in `/config/responses.js`
+
+Simple matching
+
+```
+{
+    meta: [/^joghurt$/i, Actions.LOG_FOOD, 'Joghurt'],
+    getLogSpecifics: () => (
+      [
+        [300, FitBitFoodIds.Joghurt.Plain.DEFAULT],
+        [100, FitBitFoodIds.Joghurt.Fruit.DEFAULT],
+        [40, FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+}
+```
+Dynamic values: Regex with groups
+
+```
+{
+    meta: [/^joghurt (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Joghurt with weights'],
+    getLogSpecifics: matchResult => (
+      [
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Joghurt.Plain.DEFAULT],
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Joghurt.Fruit.DEFAULT],
+        [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+}
+```
+
+
 ## 1. Create an Telegram app
 
 https://dev.fitbit.com/apps/new
