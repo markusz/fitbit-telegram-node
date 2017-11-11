@@ -42,15 +42,15 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.TASSE_180_ML]
   },
   {
-    meta: [/^weissbier/i, Actions.LOG_FOOD, 'Weißbier'],
+    meta: [/^weissbier$/i, Actions.LOG_FOOD, 'Weißbier'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.WEISSBIER, FitBitUnitIds.FLASCHE_500_ML]
   },
   {
-    meta: [/^helles/i, Actions.LOG_FOOD, 'Helles'],
+    meta: [/^helles$/i, Actions.LOG_FOOD, 'Helles'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.HELLES, FitBitUnitIds.UNIT]
   },
   {
-    meta: [/^cappuccino/i, Actions.LOG_FOOD, 'Cappuccino'],
+    meta: [/^cappuccino$/i, Actions.LOG_FOOD, 'Cappuccino'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.CAPPUCCINO, FitBitUnitIds.TASSE_240_ML]
   }
 ];
