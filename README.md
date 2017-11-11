@@ -1,6 +1,6 @@
 # Fitbit-Telegram bridge
 
-![image](https://s3.eu-west-1.amazonaws.com/fitbit-telegram-bridge/ressources/IMG_2506.PNG =350x)
+<img src="https://s3.eu-west-1.amazonaws.com/fitbit-telegram-bridge/ressources/IMG_2506.PN" width="48">
 
 This is a project that allows you to log food on Fitbit by sending messages to a Telegram bot.
 
