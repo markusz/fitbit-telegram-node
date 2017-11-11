@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Ok</title>
+    <script>
+      window.onload = () => {
+        const hash = window.location.hash || '#';
+        console.log(hash);
+        const query = hash.substring(1);
+        console.log(query);
+        const baseURL = 'https://ult4vrqyz3.execute-api.eu-west-1.amazonaws.com/test/auth/fitbit';
+        const url = `${baseURL}?${query}`;
+
+        console.log(url);
+
+        $.get(url, (data) => {
+          console.log(data);
+          $('.result').html(data.status);
+        });
+      }
+    </script>
+</head>
+<body>
+<div class="result">
+
+</div>
+</body>
+</html>
