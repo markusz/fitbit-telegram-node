@@ -54,7 +54,7 @@ This would match the message `joghurt 400 150 30` and log 400g of Plain Joghurt,
 ### Connection Fitbit and Telegram
 
 1. Find `@FitbitFoodLoggerBot` on Telegram
-2. Messagr `init` to the bot
+2. Message `init` to the bot
 3. Click the link the Bot sends you -> You will be forwarded to fitbit
 4. Login to Fitbit and grant the bot permission to access your nutrition data
 5. You will be redirected to an empty page. If the page displays "Success" you are good to go.
@@ -67,31 +67,21 @@ If you tell the bot to log food, it will add the food / calories to your persona
 
 ## Create your own Bot
 
-## 1. Create an Telegram app
+### 1. Create an Telegram app
+
+##### Create the app
 
 https://dev.fitbit.com/apps/new
 
-OAuth 2.0 Application Type: `Client`
+* OAuth 2.0 Application Type: `Client`
+* Callback URL: `http://localhost`
+* Default Access Type: `Read & Write`
 
-Callback URL: `http://localhost`
 
-Default Access Type: `Read & Write`
+##### Grant permission on fitbit.com
 
-Register creates the app and gives you three values you will need
+Take the Client ID from the dashboard of your created app and call `https://www.fitbit.com/oauth2/authorize?response_type=token&expires_in=31536000&client_id=<CLIENT_ID>&redirect_uri=http://localhost&scope=nutrition`
 
-##### ClientId
-
-OAuth 2.0 Client ID
-
-`<CLIENT_ID>`
-
-##### Call
- 
-```
-https://www.fitbit.com/oauth2/authorize?response_type=token&expires_in=31536000&client_id=<CLIENT_ID>&redirect_uri=http://localhost&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
-```
-
-##### Grant Permission in popup
 
 ##### Take code from url of failed redirect
 
@@ -103,13 +93,13 @@ The request will fail to load a webpage but give you two important bits of infor
 
 Your `ACCESS_TOKEN` and your `USER_ID`
 
-## 2. Create a Telegram bot
+### 2. Create a Telegram bot
 
-- Create a new bot by talking to the goodfather as described [here](https://core.telegram.org/bots#6-botfather)
+- Create your own bot by talking to the Botfather as described [here](https://core.telegram.org/bots#6-botfather)
 - You will receive a token, do not forget this
 - `/setprivacy` -> Disabled
 
-## 3. Deploy the Backend to AWS Lambda
+### 3. Deploy the Backend to AWS Lambda
 
 You need to set up serverless with the AWS CLI, [see here](https://serverless.com/framework/docs/providers/aws/guide/quick-start/)
 
@@ -146,7 +136,7 @@ functions:
  
 ```
 
-## 4. Wire everything together
+### 4. Wire everything together
 
 Open the following URL in your browser
 
