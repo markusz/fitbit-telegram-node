@@ -1,5 +1,6 @@
 'use strict';
 
+const { upperFirst } = require('lodash');
 const { FitBitFoodIds, FitBitUnitIds } = require('./constants');
 
 const Actions = {
@@ -9,6 +10,10 @@ const Actions = {
 };
 
 const Responses = [
+  {
+    meta: [/^(\d+) (\w+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), upperFirst(matchResult[2])]
+  },
   {
     meta: [/^(\d+)$/i, Actions.LOG_CALORIES, 'Calories'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)]
@@ -35,7 +40,7 @@ const Responses = [
   },
   {
     meta: [/^apfel$/i, Actions.LOG_FOOD, 'Joghurt'],
-    getLogSpecifics: () => [100, FitBitFoodIds.Joghurt.Plain.DEFAULT, FitBitUnitIds.GRAMM]
+    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.APPLE, FitBitUnitIds.MEDIUM_SIZE]
   },
   {
     meta: [/^kaffee$/i, Actions.LOG_FOOD, 'Kaffee'],
@@ -44,6 +49,10 @@ const Responses = [
   {
     meta: [/^weissbier$/i, Actions.LOG_FOOD, 'Weißbier'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.WEISSBIER, FitBitUnitIds.FLASCHE_500_ML]
+  },
+  {
+    meta: [/^leichtes weissbier$/i, Actions.LOG_FOOD, 'Leichtes Weißbier'],
+    getLogSpecifics: () => [500, FitBitFoodIds.Drinks.LEICHTES_WEISSBIER, FitBitUnitIds.ML]
   },
   {
     meta: [/^helles$/i, Actions.LOG_FOOD, 'Helles'],

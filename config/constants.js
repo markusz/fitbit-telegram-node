@@ -2,6 +2,8 @@
 
 const FitBitUnitIds = {
   GRAMM: 147,
+  MEDIUM_SIZE: 204,
+  ML: 209,
   UNIT: 222,
   TASSE_240_ML: 19984,
   TASSE_180_ML: 20480,
@@ -25,10 +27,11 @@ const FitBitFoodIds = {
     }
   },
   Fruit: {
-    APPLE: 537116516
+    APPLE: 2635276
   },
   Drinks: {
     WEISSBIER: 537128064,
+    LEICHTES_WEISSBIER: 537128694,
     HELLES: 537169112,
     COFFEE: 539665673,
     CAPPUCCINO: 537189105
