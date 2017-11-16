@@ -77,9 +77,9 @@ module.exports.FitbitOAuthResponseHandler = (event, context, callback) => {
 };
 
 module.exports.TelegramMealReminder = (event, context, callback) => {
-  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, process.env.CHAT_ID);
+  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, process.env.TELEGRAM_CHAT_ID);
 
-  getAccessTokenForChatId(process.env.CHAT_ID).then((dynamoDBItem) => {
+  getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID).then((dynamoDBItem) => {
     const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S');
     const fitBitApiClient = new FitBitApiClient(accessToken);
 

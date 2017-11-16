@@ -8,4 +8,4 @@ jspm_packages
 .idea/
 fitbit-telegram-node.iml
 /fitbit-telegram-node.iml
-/ressources.yml
+/config.yml
