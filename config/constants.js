@@ -46,6 +46,12 @@ const FitBitFoodIds = {
     COFFEE: 539665673,
     CAPPUCCINO: 537189105
   },
+  Wurst: {
+    SALAMI: 537151679
+  },
+  Kaese: {
+    KAESE: 537182183
+  },
   Restaurants: {
     Subway: {
       CHICKEN_TERIYAKI: 537191019,
