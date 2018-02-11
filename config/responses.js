@@ -39,8 +39,44 @@ const Responses = [
     )
   },
   {
-    meta: [/^apfel$/i, Actions.LOG_FOOD, 'Joghurt'],
-    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.APPLE, FitBitUnitIds.MEDIUM_SIZE]
+    meta: [/^subway$/i, Actions.LOG_FOOD, 'Subway standard 6ft'],
+    getLogSpecifics: () => (
+      [
+        [2, FitBitFoodIds.Restaurants.Subway.CHICKEN_FAJITA, FitBitUnitIds.UNIT],
+        [2, FitBitFoodIds.Restaurants.Subway.CHEDDAR_CHEESE, FitBitUnitIds.UNIT],
+        [2, FitBitFoodIds.Restaurants.Subway.CHIPOTLE_SAUCE, FitBitUnitIds.UNIT]
+      ]
+    )
+  },
+  {
+    meta: [/^subway halb$/i, Actions.LOG_FOOD, 'Subway standard 3ft'],
+    getLogSpecifics: () => (
+      [
+        [1, FitBitFoodIds.Restaurants.Subway.CHICKEN_FAJITA, FitBitUnitIds.UNIT],
+        [1, FitBitFoodIds.Restaurants.Subway.CHEDDAR_CHEESE, FitBitUnitIds.UNIT],
+        [1, FitBitFoodIds.Restaurants.Subway.CHIPOTLE_SAUCE, FitBitUnitIds.UNIT]
+      ]
+    )
+  },
+  {
+    meta: [/^apfel$/i, Actions.LOG_FOOD, 'Apfel'],
+    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.APFEL, FitBitUnitIds.MEDIUM_SIZE]
+  },
+  {
+    meta: [/^birne$/i, Actions.LOG_FOOD, 'Birne'],
+    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.BIRNE, FitBitUnitIds.BIRNE_GANZ]
+  },
+  {
+    meta: [/^mandarine$/i, Actions.LOG_FOOD, 'Mandarine'],
+    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.MANDARINE, FitBitUnitIds.STUECK_1]
+  },
+  {
+    meta: [/^breze$/i, Actions.LOG_FOOD, 'Breze'],
+    getLogSpecifics: () => [1, FitBitFoodIds.Backwaren.BREZE, FitBitUnitIds.UNIT]
+  },
+  {
+    meta: [/^semmel$/i, Actions.LOG_FOOD, 'Semmel'],
+    getLogSpecifics: () => [1, FitBitFoodIds.Backwaren.SEMMEL, FitBitUnitIds.GROSS_1]
   },
   {
     meta: [/^kaffee$/i, Actions.LOG_FOOD, 'Kaffee'],

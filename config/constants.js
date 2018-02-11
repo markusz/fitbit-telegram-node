@@ -2,15 +2,23 @@
 
 const FitBitUnitIds = {
   GRAMM: 147,
+  GROSS_1: 179, // Genutzt bei Semmel
   MEDIUM_SIZE: 204,
   ML: 209,
   UNIT: 222,
+  BIRNE_GANZ: 243,
+  STUECK_1: 251,
+  PORTION: 304, // Genutzt bei Birne
   TASSE_240_ML: 19984,
   TASSE_180_ML: 20480,
   FLASCHE_500_ML: 20141,
 };
 
 const FitBitFoodIds = {
+  Backwaren: {
+    SEMMEL: 539667661,
+    BREZE: 702874810
+  },
   Muesli: {
     DEFAULT: 537212681,
     HONIG_NUSS: 537212681,
@@ -27,7 +35,9 @@ const FitBitFoodIds = {
     }
   },
   Fruit: {
-    APPLE: 2635276
+    APFEL: 2635276,
+    BIRNE: 2635120,
+    MANDARINE: 537170204
   },
   Drinks: {
     WEISSBIER: 537128064,
@@ -35,6 +45,14 @@ const FitBitFoodIds = {
     HELLES: 537169112,
     COFFEE: 539665673,
     CAPPUCCINO: 537189105
+  },
+  Restaurants: {
+    Subway: {
+      CHICKEN_TERIYAKI: 537191019,
+      CHICKEN_FAJITA: 537155474,
+      CHEDDAR_CHEESE: 537202026,
+      CHIPOTLE_SAUCE: 537191345,
+    }
   }
 };
 
