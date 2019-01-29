@@ -27,6 +27,24 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 25, FitBitFoodIds.Kaese.KAESE]
   },
   {
+    meta: [/^buttertoast$/i, Actions.LOG_FOOD, 'Buttertoast'],
+    getLogSpecifics: () => (
+      [
+        [1, FitBitFoodIds.Backwaren.TOAST, FitBitUnitIds.UNIT],
+        [15, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
+    meta: [/^müsli$/i, Actions.LOG_FOOD, 'Müsli'],
+    getLogSpecifics: () => (
+      [
+        [50, FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
+        [300, FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
+      ]
+    )
+  },
+  {
     meta: [/^joghurt$/i, Actions.LOG_FOOD, 'Joghurt'],
     getLogSpecifics: () => (
       [
@@ -43,6 +61,15 @@ const Responses = [
         [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Joghurt.Plain.DEFAULT],
         [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Joghurt.Fruit.DEFAULT],
         [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+  },
+  {
+    meta: [/^müsli (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Müsli with weights'],
+    getLogSpecifics: matchResult => (
+      [
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
       ]
     )
   },

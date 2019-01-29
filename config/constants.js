@@ -17,10 +17,12 @@ const FitBitUnitIds = {
 const FitBitFoodIds = {
   Backwaren: {
     SEMMEL: 539667661,
-    BREZE: 702874810
+    BREZE: 702874810,
+    TOAST: 539659257,
   },
   Muesli: {
     DEFAULT: 537212681,
+    KLASSIK: 537146259,
     HONIG_NUSS: 537212681,
     SCHOKO_KEKS: 537128067,
   },
@@ -44,7 +46,8 @@ const FitBitFoodIds = {
     LEICHTES_WEISSBIER: 537128694,
     HELLES: 537169112,
     COFFEE: 539665673,
-    CAPPUCCINO: 537189105
+    CAPPUCCINO: 537189105,
+    MILCH: 537191677
   },
   Wurst: {
     SALAMI: 537151679
@@ -52,6 +55,7 @@ const FitBitFoodIds = {
   Kaese: {
     KAESE: 537182183
   },
+  BUTTER: 537133257,
   Restaurants: {
     Subway: {
       CHICKEN_TERIYAKI: 537191019,
