@@ -132,6 +132,10 @@ const Responses = [
   {
     meta: [/^cappuccino$/i, Actions.LOG_FOOD, 'Cappuccino'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.CAPPUCCINO, FitBitUnitIds.TASSE_240_ML]
+  },
+  {
+    meta: [/^bionade$/i, Actions.LOG_FOOD, 'Cappuccino'],
+    getLogSpecifics: () => [330, FitBitFoodIds.Drinks.BIONADE, FitBitUnitIds.ML]
   }
 ];
 

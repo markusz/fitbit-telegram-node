@@ -10,7 +10,7 @@ provider:
     DYNAMODB_TABLE: ${file(./config.yml):dynamoDBTableName}
   region: eu-west-1
   stage: test
-  profile: fitbit
+  #profile: fitbit
   memorySize: 128
   timeout: 10
   iamRoleStatements:
