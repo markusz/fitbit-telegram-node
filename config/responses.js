@@ -11,7 +11,7 @@ const Actions = {
 
 const Responses = [
   {
-    meta: [/^(\d+) (\w+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
+    meta: [/^(\d+) ([a-zA-Z ]+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), upperFirst(matchResult[2])]
   },
   {
