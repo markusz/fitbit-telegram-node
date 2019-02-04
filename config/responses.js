@@ -1,6 +1,6 @@
 'use strict';
 
-const { upperFirst } = require('lodash');
+const { startCase } = require('lodash');
 const { FitBitFoodIds, FitBitUnitIds } = require('./constants');
 
 const Actions = {
@@ -12,7 +12,7 @@ const Actions = {
 const Responses = [
   {
     meta: [/^(\d+) ([a-zA-Z ]+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), upperFirst(matchResult[2])]
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), startCase(matchResult[2])]
   },
   {
     meta: [/^(\d+)$/i, Actions.LOG_CALORIES, 'Calories'],
