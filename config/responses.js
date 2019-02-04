@@ -65,6 +65,16 @@ const Responses = [
     )
   },
   {
+    meta: [/^(salat lachs semmel|sls)$/i, Actions.LOG_FOOD, 'Salad with Salmon and Semmel'],
+    getLogSpecifics: () => (
+      [
+        [280, FitBitFoodIds.Salad.EDEKA_KAESE_EI, FitBitUnitIds.GRAMM],
+        [125, FitBitFoodIds.Fish.STREMELLACHS, FitBitUnitIds.GRAMM],
+        [1, FitBitFoodIds.Backwaren.KARTOFFELSEMMEL, FitBitUnitIds.UNIT]
+      ]
+    )
+  },
+  {
     meta: [/^müsli (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Müsli with weights'],
     getLogSpecifics: matchResult => (
       [

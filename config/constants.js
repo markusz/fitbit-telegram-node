@@ -17,6 +17,7 @@ const FitBitUnitIds = {
 const FitBitFoodIds = {
   Backwaren: {
     SEMMEL: 539667661,
+    KARTOFFELSEMMEL: 537166438,
     BREZE: 702874810,
     TOAST: 539659257,
   },
@@ -35,6 +36,9 @@ const FitBitFoodIds = {
       DEFAULT: 544978453,
       P_01: 544978453,
     }
+  },
+  Salad: {
+    EDEKA_KAESE_EI: 541881753
   },
   Fruit: {
     APFEL: 2635276,
@@ -55,6 +59,9 @@ const FitBitFoodIds = {
   },
   Kaese: {
     KAESE: 537182183
+  },
+  Fish: {
+    STREMELLACHS: 537113635
   },
   BUTTER: 537133257,
   Restaurants: {
