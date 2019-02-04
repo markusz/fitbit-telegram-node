@@ -19,7 +19,7 @@ class ResponseProcessor {
 
   static getMealTypeByTime(time = moment().tz('Europe/Berlin')) {
     const timePattern = 'HH:mm:ss';
-    if (time.isBetween(moment('07:00:00', timePattern), moment('09:30:00', timePattern), null, '[]')) {
+    if (time.isBetween(moment('06:00:00', timePattern), moment('09:30:00', timePattern), null, '[]')) {
       return FitBitMealTypeIds.BREAKFAST;
     }
 
