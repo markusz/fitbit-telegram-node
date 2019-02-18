@@ -36,11 +36,20 @@ const Responses = [
     )
   },
   {
-    meta: [/^müsli$/i, Actions.LOG_FOOD, 'Müsli'],
+    meta: [/^(müsli|fs)$/i, Actions.LOG_FOOD, 'Müsli'],
     getLogSpecifics: () => (
       [
-        [50, FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
-        [300, FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
+        [60, FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
+        [400, FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
+      ]
+    )
+  },
+  {
+    meta: [/^müsli (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Müsli with weights'],
+    getLogSpecifics: matchResult => (
+      [
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
       ]
     )
   },
@@ -71,15 +80,6 @@ const Responses = [
         [280, FitBitFoodIds.Salad.EDEKA_KAESE_EI, FitBitUnitIds.GRAMM],
         [125, FitBitFoodIds.Fish.STREMELLACHS, FitBitUnitIds.GRAMM],
         [1, FitBitFoodIds.Backwaren.KARTOFFELSEMMEL, FitBitUnitIds.UNIT]
-      ]
-    )
-  },
-  {
-    meta: [/^müsli (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Müsli with weights'],
-    getLogSpecifics: matchResult => (
-      [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
       ]
     )
   },
@@ -124,7 +124,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Backwaren.SEMMEL, FitBitUnitIds.GROSS_1]
   },
   {
-    meta: [/^kaffee$/i, Actions.LOG_FOOD, 'Kaffee'],
+    meta: [/^(kaffee|k)$/i, Actions.LOG_FOOD, 'Kaffee'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.TASSE_180_ML]
   },
   {
@@ -144,7 +144,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.CAPPUCCINO, FitBitUnitIds.TASSE_240_ML]
   },
   {
-    meta: [/^bionade$/i, Actions.LOG_FOOD, 'Cappuccino'],
+    meta: [/^bionade$/i, Actions.LOG_FOOD, 'Bionade'],
     getLogSpecifics: () => [330, FitBitFoodIds.Drinks.BIONADE, FitBitUnitIds.ML]
   }
 ];
