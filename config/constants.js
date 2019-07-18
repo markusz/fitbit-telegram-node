@@ -20,6 +20,7 @@ const FitBitFoodIds = {
     KARTOFFELSEMMEL: 537166438,
     BREZE: 702874810,
     TOAST: 539659257,
+    BROT: 537181422
   },
   Muesli: {
     DEFAULT: 537212681,

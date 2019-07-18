@@ -36,6 +36,15 @@ const Responses = [
     )
   },
   {
+    meta: [/^butterbrot m$/i, Actions.LOG_FOOD, 'Butterbrot Mittel'],
+    getLogSpecifics: () => (
+      [
+        [35, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM],
+        [15, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
     meta: [/^(müsli|fs)$/i, Actions.LOG_FOOD, 'Müsli'],
     getLogSpecifics: () => (
       [
