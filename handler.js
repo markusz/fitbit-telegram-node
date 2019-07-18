@@ -8,6 +8,7 @@ const lodash = require('lodash');
 const { TelegramMessage } = require('./src/telegram-message');
 const { TelegramApiClient } = require('./src/telegram-api-client');
 const { FitBitApiClient } = require('./src/fitbit-api-client');
+const { ResponseProcessor } = require('./src/response-processor');
 
 const dynamoDB = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
@@ -117,6 +118,13 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
     if (telegramMessage.getLowerCaseTextMessage() === 'init') {
       const url = makeOAuthURLForInitMessage(telegramMessage);
       return telegramApiClient.replyInTelegramChat(url)
+        .then(masterCallback)
+        .catch(masterCallback);
+    }
+
+    if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
+      const cmds = ResponseProcessor.getPossibleCommands();
+      return telegramApiClient.replyInTelegramChat(cmds)
         .then(masterCallback)
         .catch(masterCallback);
     }
