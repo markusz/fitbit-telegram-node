@@ -15,10 +15,11 @@
   "license": "ISC",
   "dependencies": {
     "eslint-config-airbnb": "^16.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.14",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.14",
     "q": "^1.5.1",
+    "serverless": "^1.47.0",
     "superagent": "^3.8.0"
   },
   "devDependencies": {

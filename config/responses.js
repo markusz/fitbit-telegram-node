@@ -45,6 +45,31 @@ const Responses = [
     )
   },
   {
+    meta: [/^butterbrot l$/i, Actions.LOG_FOOD, 'Butterbrot Groß'],
+    getLogSpecifics: () => (
+      [
+        [50, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM],
+        [25, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
+    meta: [/^brot m$/i, Actions.LOG_FOOD, 'Scheibe Brot Mittel'],
+    getLogSpecifics: () => (
+      [
+        [35, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
+    meta: [/^brot l$/i, Actions.LOG_FOOD, 'Scheibe Brot Large'],
+    getLogSpecifics: () => (
+      [
+        [50, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
     meta: [/^(müsli|fs)$/i, Actions.LOG_FOOD, 'Müsli'],
     getLogSpecifics: () => (
       [
