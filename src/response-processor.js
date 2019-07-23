@@ -84,7 +84,9 @@ class ResponseProcessor {
     return messageParts.join('\n');
   }
 
-  static getLogRequestParamsForCalories(calories, foodName = moment().tz('Europe/Berlin').format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
+  static getLogRequestParamsForCalories(calories, foodName = moment()
+    .tz('Europe/Berlin')
+    .format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
     return {
       foodName,
       unitId,
