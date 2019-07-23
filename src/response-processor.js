@@ -80,7 +80,7 @@ class ResponseProcessor {
   }
 
   static getPossibleCommands() {
-    const messageParts = Responses.map(res => res.meta[0].toString());
+    const messageParts = Responses.map(res => `${res.meta[0].toString()} => ${res.meta[2].toString()}`);
     return messageParts.join('\n');
   }
 

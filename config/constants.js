@@ -64,6 +64,9 @@ const FitBitFoodIds = {
   Fish: {
     STREMELLACHS: 537113635
   },
+  Sweets: {
+    HARIBO: 539657890
+  },
   BUTTER: 537133257,
   Restaurants: {
     Subway: {

@@ -138,6 +138,18 @@ const Responses = [
     )
   },
   {
+    meta: [/^haribo s$/i, Actions.LOG_FOOD, '4-5 Haribos'],
+    getLogSpecifics: () => [25, FitBitFoodIds.Sweets.HARIBO, FitBitUnitIds.GRAMM]
+  },
+  {
+    meta: [/^haribo m$/i, Actions.LOG_FOOD, 'Eine mittlere Portion (Weniger als eine Hand voll, aber mehr als paar einzelne'],
+    getLogSpecifics: () => [50, FitBitFoodIds.Sweets.HARIBO, FitBitUnitIds.GRAMM]
+  },
+  {
+    meta: [/^haribo l$/i, Actions.LOG_FOOD, 'Eine handvoll Haribo Süßigkeiten'],
+    getLogSpecifics: () => [75, FitBitFoodIds.Sweets.HARIBO, FitBitUnitIds.GRAMM]
+  },
+  {
     meta: [/^apfel$/i, Actions.LOG_FOOD, 'Apfel'],
     getLogSpecifics: () => [1, FitBitFoodIds.Fruit.APFEL, FitBitUnitIds.MEDIUM_SIZE]
   },
