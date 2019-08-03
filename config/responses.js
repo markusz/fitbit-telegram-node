@@ -174,12 +174,28 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Backwaren.SEMMEL, FitBitUnitIds.GROSS_1]
   },
   {
+    meta: [/^kräuterbaguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Kräuterbaguette'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Backwaren.KRAEUTERBAGUETTE]
+  },
+  {
+    meta: [/^baguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Baguette'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 20, FitBitFoodIds.Backwaren.BAGUETTE]
+  },
+  {
     meta: [/^(kaffee|k)$/i, Actions.LOG_FOOD, 'Kaffee'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.TASSE_180_ML]
   },
   {
     meta: [/^weissbier$/i, Actions.LOG_FOOD, 'Weißbier'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.WEISSBIER, FitBitUnitIds.FLASCHE_500_ML]
+  },
+  {
+    meta: [/^schorle$/i, Actions.LOG_FOOD, 'Schorle'],
+    getLogSpecifics: () => [100, FitBitFoodIds.Drinks.APFELSAFT, FitBitUnitIds.ML]
+  },
+  {
+    meta: [/^wein$/i, Actions.LOG_FOOD, 'Ein Glas Rotwein'],
+    getLogSpecifics: () => [125, FitBitFoodIds.Drinks.ROTWEIN, FitBitUnitIds.ML]
   },
   {
     meta: [/^leichtes weissbier$/i, Actions.LOG_FOOD, 'Leichtes Weißbier'],
