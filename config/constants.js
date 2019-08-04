@@ -61,10 +61,11 @@ const FitBitFoodIds = {
     ROTWEIN: 2634414
   },
   Wurst: {
-    SALAMI: 537151679
+    SALAMI: 537151679,
+    SCHINKEN: 2635922
   },
   Kaese: {
-    KAESE: 537182183
+    KAESE: 735679015
   },
   Fish: {
     STREMELLACHS: 537113635

@@ -19,8 +19,24 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)]
   },
   {
-    meta: [/^salamischeibe (\d+)$/i, Actions.LOG_FOOD, 'Salamischeibe'],
+    meta: [/^käse (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Bergbauernkäse mit etwa 22g'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Kaese.KAESE]
+  },
+  {
+    meta: [/^schinken (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Schinken mit etwa 20g'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 20, FitBitFoodIds.Wurst.SCHINKEN]
+  },
+  {
+    meta: [/^salami s (\d+)$/i, Actions.LOG_FOOD, 'Kleine Salamischeibe mit etwa 4g (fein geschnitten, 4-5 cm im Durchmesser)'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 4, FitBitFoodIds.Wurst.SALAMI]
+  },
+  {
+    meta: [/^salami m (\d+)$/i, Actions.LOG_FOOD, 'Mittlere Salamischeibe mit etwa 8g (etwas dicker geschnitten / größerer Durchmesser)'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 8, FitBitFoodIds.Wurst.SALAMI]
+  },
+  {
+    meta: [/^salami l (\d+)$/i, Actions.LOG_FOOD, 'Große Salamischeibe mit etwa 12g (dick geschnitten, >8cm Durchmesser'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 12, FitBitFoodIds.Wurst.SALAMI]
   },
   {
     meta: [/^traube (\d+)$/i, Actions.LOG_FOOD, 'Trauben'],
