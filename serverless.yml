@@ -3,11 +3,12 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
-    TELEGRAM_API_TOKEN: ${file(./config.yml):telegramToken}
-    TELEGRAM_CHAT_ID: ${file(./config.yml):telegramChatId}
-    SECURITY_TOKEN: ${file(./config.yml):securityToken}
-    CLIENT_ID: ${file(./config.yml):fitbitClientId}
-    DYNAMODB_TABLE: ${file(./config.yml):dynamoDBTableName}
+    TELEGRAM_API_TOKEN: ${env:TELEGRAM_API_TOKEN}
+    TELEGRAM_CHAT_ID: ${env:TELEGRAM_CHAT_ID}
+    SECURITY_TOKEN: ${env:SECURITY_TOKEN}
+    CLIENT_ID: ${env:CLIENT_ID}
+    DYNAMODB_TABLE: ${env:DYNAMODB_TABLE}
+    DYNAMODB_ARN: ${env:DYNAMODB_ARN}
   region: eu-west-1
   stage: test
   #profile: fitbit
@@ -17,7 +18,7 @@ provider:
   -  Effect: Allow
      Action:
        - dynamodb:*
-     Resource: ${file(./config.yml):dynamoDBARN}
+     Resource: ${env:DYNAMODB_ARN}
 
   exclude:
     - .idea/**
