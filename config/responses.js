@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-const { startCase } = require('lodash');
-const { FitBitFoodIds, FitBitUnitIds } = require('./constants');
+const { startCase } = require('lodash')
+const { FitBitFoodIds, FitBitUnitIds } = require('./constants')
 
 const Actions = {
   LOG_CALORIES: 0,
   LOG_FOOD: 1,
   BUDGET: 2
-};
+}
 
 const Responses = [
   {
@@ -229,9 +229,9 @@ const Responses = [
     meta: [/^bionade$/i, Actions.LOG_FOOD, 'Bionade'],
     getLogSpecifics: () => [330, FitBitFoodIds.Drinks.BIONADE, FitBitUnitIds.ML]
   }
-];
+]
 
 module.exports = {
   Responses,
   Actions
-};
+}

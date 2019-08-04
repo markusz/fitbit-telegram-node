@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const FitBitUnitIds = {
   GRAMM: 147,
@@ -11,8 +11,8 @@ const FitBitUnitIds = {
   PORTION: 304, // Genutzt bei Birne
   TASSE_240_ML: 19984,
   TASSE_180_ML: 20480,
-  FLASCHE_500_ML: 20141,
-};
+  FLASCHE_500_ML: 20141
+}
 
 const FitBitFoodIds = {
   Backwaren: {
@@ -28,16 +28,16 @@ const FitBitFoodIds = {
     DEFAULT: 537212681,
     KLASSIK: 537146259,
     HONIG_NUSS: 537212681,
-    SCHOKO_KEKS: 537128067,
+    SCHOKO_KEKS: 537128067
   },
   Joghurt: {
     Plain: {
       DEFAULT: 537115055,
-      P_01: 537115055,
+      P_01: 537115055
     },
     Fruit: {
       DEFAULT: 544978453,
-      P_01: 544978453,
+      P_01: 544978453
     }
   },
   Salad: {
@@ -79,10 +79,10 @@ const FitBitFoodIds = {
       CHICKEN_TERIYAKI: 537191019,
       CHICKEN_FAJITA: 537155474,
       CHEDDAR_CHEESE: 537202026,
-      CHIPOTLE_SAUCE: 537191345,
+      CHIPOTLE_SAUCE: 537191345
     }
   }
-};
+}
 
 const FitBitMealTypeIds = {
   BREAKFAST: 1,
@@ -91,11 +91,11 @@ const FitBitMealTypeIds = {
   AFTERNOON: 4,
   DINNER: 5,
   EVENING_SNACK: 6,
-  ANYTIME: 7,
-};
+  ANYTIME: 7
+}
 
 module.exports = {
   FitBitUnitIds,
   FitBitMealTypeIds,
   FitBitFoodIds
-};
+}
