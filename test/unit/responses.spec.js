@@ -18,7 +18,7 @@ describe('Responses', () => {
       expect(_(moment('02:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.ANYTIME)
       expect(_(moment('03:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.ANYTIME)
       expect(_(moment('04:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.ANYTIME)
-      expect(_(moment('06:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.ANYTIME)
+      expect(_(moment('06:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.BREAKFAST)
       expect(_(moment('07:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.BREAKFAST)
       expect(_(moment('08:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.BREAKFAST)
       expect(_(moment('09:00:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.BREAKFAST)
