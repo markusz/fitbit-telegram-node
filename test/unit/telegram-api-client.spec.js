@@ -3,8 +3,8 @@
 'use strict'
 
 const chai = require('chai')
-const TelegramAPIClient = require('../src/telegram-api-client').TelegramApiClient
-const { ResponseProcessor } = require('../src/response-processor')
+const TelegramAPIClient = require('../../src/telegram-api-client').TelegramApiClient
+const { ResponseProcessor } = require('../../src/response-processor')
 
 const expect = chai.expect
 

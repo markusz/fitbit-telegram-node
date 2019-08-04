@@ -4,8 +4,8 @@
 
 const chai = require('chai')
 const moment = require('moment-timezone')
-const { ResponseProcessor } = require('../src/response-processor')
-const { FitBitMealTypeIds } = require('../config/constants')
+const { ResponseProcessor } = require('../../src/response-processor')
+const { FitBitMealTypeIds } = require('../../config/constants')
 
 const expect = chai.expect
 
