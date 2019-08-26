@@ -19,6 +19,10 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)]
   },
   {
+    meta: [/^dd c$/i, Actions.LOG_CALORIES, 'Classic Ceasars Salad from Dean and David'],
+    getLogSpecifics: matchResult => [367 + 247 + 122, 'Classic Ceasars Salad (Dean & David)']
+  },
+  {
     meta: [/^käse (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Bergbauernkäse mit etwa 22g'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Kaese.KAESE]
   },
