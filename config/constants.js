@@ -30,6 +30,11 @@ const FitBitFoodIds = {
     HONIG_NUSS: 537212681,
     SCHOKO_KEKS: 537128067
   },
+  Quark: {
+    FETT_20: 537116107,
+    FETT_40: 691777822,
+    FETT_MAGER: 537214525,
+  },
   Joghurt: {
     Plain: {
       DEFAULT: 537115055,
