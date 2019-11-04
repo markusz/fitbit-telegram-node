@@ -50,6 +50,7 @@ const FitBitFoodIds = {
   },
   Fruit: {
     APFEL: 2635276,
+    PFLAUME: 2636614,
     BIRNE: 2635120,
     MANDARINE: 537170204,
     GRAPE: 537192015
