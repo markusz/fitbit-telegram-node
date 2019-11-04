@@ -33,7 +33,7 @@ const FitBitFoodIds = {
   Quark: {
     FETT_20: 537116107,
     FETT_40: 691777822,
-    FETT_MAGER: 537214525,
+    FETT_MAGER: 537214525
   },
   Joghurt: {
     Plain: {
