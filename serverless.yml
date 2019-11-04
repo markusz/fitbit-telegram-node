@@ -1,7 +1,7 @@
 service: fitbit-telegram-api
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   environment:
     TELEGRAM_API_TOKEN: ${env:TELEGRAM_API_TOKEN}
     TELEGRAM_CHAT_ID: ${env:TELEGRAM_CHAT_ID}
