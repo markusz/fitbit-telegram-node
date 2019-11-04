@@ -135,7 +135,7 @@ const Responses = [
     meta: [/^q (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark mager=$1 with müsli=$2'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER.DEFAULT],
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
         [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
@@ -144,8 +144,8 @@ const Responses = [
     meta: [/^q20 (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark (mager=$1 20=$2) with müsli=$3'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER.DEFAULT],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_20.DEFAULT],
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_20],
         [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
@@ -154,8 +154,8 @@ const Responses = [
     meta: [/^q40 (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark (mager=$1 40=$2) with müsli=$3'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER.DEFAULT],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_40.DEFAULT],
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_40],
         [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
