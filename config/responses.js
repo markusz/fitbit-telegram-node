@@ -208,7 +208,7 @@ const Responses = [
   },
   {
     meta: [/^pflaume|pf$/i, Actions.LOG_FOOD, 'Pflaume'],
-    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.PFLAUME, FitBitUnitIds.UNIT]
+    getLogSpecifics: () => [1, FitBitFoodIds.Fruit.PFLAUME, FitBitUnitIds.MEDIUM_SIZE]
   },
   {
     meta: [/^birne$/i, Actions.LOG_FOOD, 'Birne'],
