@@ -136,7 +136,7 @@ const Responses = [
     getLogSpecifics: matchResult => (
       [
         [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
-        [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
   },
@@ -207,7 +207,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Fruit.APFEL, FitBitUnitIds.MEDIUM_SIZE]
   },
   {
-    meta: [/^pflaume|pf$/i, Actions.LOG_FOOD, 'Pflaume'],
+    meta: [/^(pflaume|pf)$/i, Actions.LOG_FOOD, 'Pflaume'],
     getLogSpecifics: () => [1, FitBitFoodIds.Fruit.PFLAUME, FitBitUnitIds.MEDIUM_SIZE]
   },
   {
@@ -239,7 +239,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.TASSE_180_ML]
   },
   {
-    meta: [/^weissbier|wb$/i, Actions.LOG_FOOD, 'Weißbier'],
+    meta: [/^(weissbier|wb)$/i, Actions.LOG_FOOD, 'Weißbier'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.WEISSBIER, FitBitUnitIds.FLASCHE_500_ML]
   },
   {
@@ -251,7 +251,7 @@ const Responses = [
     getLogSpecifics: () => [125, FitBitFoodIds.Drinks.ROTWEIN, FitBitUnitIds.ML]
   },
   {
-    meta: [/^leichtes weissbier|lwb$/i, Actions.LOG_FOOD, 'Leichtes Weißbier'],
+    meta: [/^(leichtes weissbier|lwb)$/i, Actions.LOG_FOOD, 'Leichtes Weißbier'],
     getLogSpecifics: () => [500, FitBitFoodIds.Drinks.LEICHTES_WEISSBIER, FitBitUnitIds.ML]
   },
   {
@@ -259,7 +259,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.HELLES, FitBitUnitIds.UNIT]
   },
   {
-    meta: [/^cappuccino|c$/i, Actions.LOG_FOOD, 'Cappuccino'],
+    meta: [/^(cappuccino|c)$/i, Actions.LOG_FOOD, 'Cappuccino'],
     getLogSpecifics: () => [1, FitBitFoodIds.Drinks.CAPPUCCINO, FitBitUnitIds.TASSE_240_ML]
   },
   {
