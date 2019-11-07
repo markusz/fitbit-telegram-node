@@ -79,7 +79,7 @@ const Responses = [
   },
   {
     meta: [/^brot (\d+)$/i, Actions.LOG_FOOD, 'Brot. Zur Abschätzung: 1cm dick & Handflächengroß = 45g, jedes Fingerglied mehr/weniger entspricht etwa 5g+-'],
-    getLogSpecifics: () => (
+    getLogSpecifics: matchResult => (
       [
         [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
       ]
