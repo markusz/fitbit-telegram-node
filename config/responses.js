@@ -18,7 +18,7 @@ const Responses = [
     meta: [/^(\d+) (\d+) ([\u00C0-\u017Fa-zA-Z ]+)$/i, Actions.LOG_CALORIES, '$1 gramm of a food with $2 calories/100g'],
     getLogSpecifics: matchResult => [
       Math.round(Number.parseInt(matchResult[1], 10) / 100 * Number.parseInt(matchResult[2], 10)),
-      startCase(matchResult[3])
+      `${matchResult[1]} á ${matchResult[2]}/100g ${startCase(matchResult[3])}`
     ]
   },
   {
