@@ -15,6 +15,10 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), startCase(matchResult[2])]
   },
   {
+    meta: [/^(\d+) (\d+) ([\u00C0-\u017Fa-zA-Z ]+)$/i, Actions.LOG_CALORIES, '$1 gramm of a food with $2 calories/100g'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)/100 * Number.parseInt(matchResult[2], 10), startCase(matchResult[3])]
+  },
+  {
     meta: [/^(\d+)$/i, Actions.LOG_CALORIES, 'Calories'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)]
   },
