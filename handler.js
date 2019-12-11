@@ -151,6 +151,7 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
       .then((/* logRes */) => {
         fitBitApiClient
           .getFoodLog().then((getLogRes) => {
+            console.log(getLogRes)
             const total = lodash.get(getLogRes, 'body.summary.calories', null)
             const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
             const reply = `Food logged. Calories today: ${total}, Remaining budget: ${budget - total} / ${budget}.`
