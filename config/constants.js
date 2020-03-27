@@ -48,6 +48,9 @@ const FitBitFoodIds = {
   Salad: {
     EDEKA_KAESE_EI: 541881753
   },
+  Vegetables: {
+    KARTOFFELN_GEKOCHT: 537219908
+  },
   Fruit: {
     APFEL: 2635276,
     PFLAUME: 2636614,
@@ -80,6 +83,7 @@ const FitBitFoodIds = {
     HARIBO: 539657890
   },
   BUTTER: 537133257,
+  NUDELN: 537155075,
   Restaurants: {
     Subway: {
       CHICKEN_TERIYAKI: 537191019,
