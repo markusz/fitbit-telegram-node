@@ -87,19 +87,20 @@ class ResponseProcessor {
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
+    const horizontalSeparator = " | "
     const availChars = 37
     const secondColumnLength = 4
     const thirdColumnLength = 5
     const percentDecimals = 1
-    const separatorSpaceLength = 6
+    const separatorSpaceLength = horizontalSeparator.length * 2
 
     const firstColumnLength = availChars - (secondColumnLength + thirdColumnLength + percentDecimals + separatorSpaceLength)
-    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | -----`
+    const separator = `${''.padEnd(firstColumnLength, '-')}${horizontalSeparator}${''.padEnd(secondColumnLength, '-')}${horizontalSeparator}${''.padEnd(thirdColumnLength, '-')}`
 
     const stringElements = [
       '```',
       separator,
-      `${ResponseProcessor.fitMsg('Food', firstColumnLength)} | kcal |   %`
+      `${ResponseProcessor.fitMsg('Food', firstColumnLength)}${horizontalSeparator}kcal${horizontalSeparator}  %`
     ]
 
     const goal = json.goals.calories
@@ -116,13 +117,13 @@ class ResponseProcessor {
       const mobileFriendlyName = ResponseProcessor.fitMsg(foodEntry.loggedFood.name, firstColumnLength)
       const calories = foodEntry.nutritionalValues.calories.toString().padStart(secondColumnLength)
       const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(percentDecimals).toString().padStart(thirdColumnLength)
-      const message = `${mobileFriendlyName} | ${calories} | ${percentageOfDailyBudget}`
+      const message = `${mobileFriendlyName}${horizontalSeparator}${calories}${horizontalSeparator}${percentageOfDailyBudget}`
       stringElements.push(message)
     }
 
     stringElements.push(separator)
-    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(secondColumnLength)} | ${(status / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
-    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(secondColumnLength)} | ${((goal - status) / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)}${horizontalSeparator}${status.toString().padStart(secondColumnLength)}${horizontalSeparator}${(status / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)}${horizontalSeparator}${(goal - status).toString().padStart(secondColumnLength)}${horizontalSeparator}${((goal - status) / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
     stringElements.push(separator)
     stringElements.push('```')
 
