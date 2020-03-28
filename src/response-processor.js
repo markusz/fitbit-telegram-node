@@ -87,7 +87,7 @@ class ResponseProcessor {
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
-    const firstColumnLength = 22
+    const firstColumnLength = 23
 
     const goal = json.goals.calories
     const status = json.summary.calories
