@@ -108,6 +108,7 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
   const masterCallback = messageReceivedCallback(callback)
 
   console.log(`chatId=${telegramMessage.getChatId()}`)
+  console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
   getAccessTokenForChatId(telegramMessage.getChatId()).then((dynamoDBItem) => {
     const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
@@ -145,8 +146,6 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
     }
 
     const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
-
-    console.log(telegramMessage.getLowerCaseTextMessage())
     console.log(queryParams)
 
     if (!queryParams) {
@@ -166,7 +165,7 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
             const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
 
             const reply = `
-            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
+            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}
             ${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
             `
 
