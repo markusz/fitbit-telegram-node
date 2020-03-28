@@ -1,0 +1,512 @@
+{
+  "foods": [
+    {
+      "isFavorite": true,
+      "logDate": "2020-03-28",
+      "logId": 21150320739,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 500,
+        "brand": "REWE Beste Wahl",
+        "calories": 330,
+        "foodId": 537214525,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Speise Quark Magerstufe",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          222,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 330,
+        "carbs": 20.5,
+        "fat": 1,
+        "fiber": 0,
+        "protein": 60,
+        "sodium": 0
+      }
+    },
+    {
+      "isFavorite": true,
+      "logDate": "2020-03-28",
+      "logId": 21150516286,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 1,
+        "brand": "",
+        "calories": 30,
+        "foodId": 539665673,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Kaffee mit Milch und Zucker",
+        "unit": {
+          "id": 20480,
+          "name": "Kaffeetasse (180 ml)",
+          "plural": "Kaffeetasse (180 ml)"
+        },
+        "units": [
+          20480,
+          20481,
+          19909,
+          20482,
+          20200,
+          209,
+          189,
+          128,
+          364,
+          349,
+          91,
+          256,
+          279,
+          401,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 30,
+        "carbs": 7.14,
+        "fat": 0.14,
+        "fiber": 0,
+        "protein": 0.31,
+        "sodium": 6
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21150771426,
+      "loggedFood": {
+        "accessLevel": "PRIVATE",
+        "amount": 1,
+        "brand": "",
+        "calories": 50,
+        "foodId": 0,
+        "mealTypeId": 2,
+        "name": "Pickup",
+        "unit": {
+          "id": 222,
+          "name": "order",
+          "plural": "orders"
+        },
+        "units": [
+          222
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 50,
+        "carbs": 0,
+        "fat": 0,
+        "fiber": 0,
+        "protein": 0,
+        "sodium": 0
+      }
+    },
+    {
+      "isFavorite": true,
+      "logDate": "2020-03-28",
+      "logId": 21150780579,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 34,
+        "brand": "Kölln",
+        "calories": 155,
+        "foodId": 537212681,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Müsli Knusper Honig-Nuss",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          222,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 155,
+        "carbs": 20.91,
+        "fat": 5.95,
+        "fiber": 2.18,
+        "protein": 3.26,
+        "sodium": 54.4
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21150859142,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 250,
+        "brand": "Ja!",
+        "calories": 355,
+        "foodId": 691777822,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Quark 40%",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          222,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 355,
+        "carbs": 8,
+        "fat": 25.75,
+        "fiber": 0,
+        "protein": 22.5,
+        "sodium": 0
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151045446,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 100,
+        "brand": "",
+        "calories": 46,
+        "foodId": 2635570,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Apfelsaft, natürlich",
+        "unit": {
+          "id": 209,
+          "name": "ml",
+          "plural": "ml"
+        },
+        "units": [
+          209,
+          189,
+          128,
+          364,
+          349,
+          91,
+          256,
+          279,
+          401
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 46,
+        "carbs": 11.36,
+        "fat": 0,
+        "fiber": 0,
+        "protein": 0.2,
+        "sodium": 6.97
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151407334,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 57,
+        "brand": "",
+        "calories": 50,
+        "foodId": 537219908,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Kartoffeln (Fruchtfleisch, Gesalzen, Gekocht)",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          24943,
+          91,
+          256,
+          279,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 50,
+        "carbs": 11.5,
+        "fat": 0.06,
+        "fiber": 1.14,
+        "protein": 1.07,
+        "sodium": 137.08
+      }
+    },
+    {
+      "isFavorite": true,
+      "logDate": "2020-03-28",
+      "logId": 21151602469,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 1,
+        "brand": "",
+        "calories": 30,
+        "foodId": 539665673,
+        "locale": "de_DE",
+        "mealTypeId": 2,
+        "name": "Kaffee mit Milch und Zucker",
+        "unit": {
+          "id": 20480,
+          "name": "Kaffeetasse (180 ml)",
+          "plural": "Kaffeetasse (180 ml)"
+        },
+        "units": [
+          20480,
+          20481,
+          19909,
+          20482,
+          20200,
+          209,
+          189,
+          128,
+          364,
+          349,
+          91,
+          256,
+          279,
+          401,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 30,
+        "carbs": 7.14,
+        "fat": 0.14,
+        "fiber": 0,
+        "protein": 0.31,
+        "sodium": 6
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151712874,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 1,
+        "brand": "",
+        "calories": 1,
+        "foodId": 537219908,
+        "locale": "de_DE",
+        "mealTypeId": 3,
+        "name": "Kartoffeln (Fruchtfleisch, Gesalzen, Gekocht)",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          24943,
+          91,
+          256,
+          279,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 1,
+        "carbs": 0.2,
+        "fat": 0,
+        "fiber": 0.02,
+        "protein": 0.02,
+        "sodium": 2.4
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21150991263,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 1,
+        "brand": "",
+        "calories": 1,
+        "foodId": 537219908,
+        "locale": "de_DE",
+        "mealTypeId": 4,
+        "name": "Kartoffeln (Fruchtfleisch, Gesalzen, Gekocht)",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          24943,
+          91,
+          256,
+          279,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 1,
+        "carbs": 0.2,
+        "fat": 0,
+        "fiber": 0.02,
+        "protein": 0.02,
+        "sodium": 2.4
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151598620,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 22,
+        "brand": "Bergader",
+        "calories": 80,
+        "foodId": 735679015,
+        "locale": "de_DE",
+        "mealTypeId": 4,
+        "name": "Bergbauern Käse Würzig-Nussig",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          222,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 80,
+        "carbs": 0,
+        "fat": 6.38,
+        "fiber": 0,
+        "protein": 5.57,
+        "sodium": 99
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151666338,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 34,
+        "brand": "",
+        "calories": 76,
+        "foodId": 537181422,
+        "locale": "de_DE",
+        "mealTypeId": 4,
+        "name": "Bauernbrot",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          20115,
+          20116,
+          20117,
+          19993,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 76,
+        "carbs": 14.4,
+        "fat": 0.38,
+        "fiber": 1.62,
+        "protein": 2.31,
+        "sodium": 182.58
+      }
+    },
+    {
+      "isFavorite": false,
+      "logDate": "2020-03-28",
+      "logId": 21151978011,
+      "loggedFood": {
+        "accessLevel": "PUBLIC",
+        "amount": 1,
+        "brand": "",
+        "calories": 1,
+        "foodId": 537219908,
+        "locale": "de_DE",
+        "mealTypeId": 4,
+        "name": "Kartoffeln (Fruchtfleisch, Gesalzen, Gekocht)",
+        "unit": {
+          "id": 147,
+          "name": "Gramm",
+          "plural": "Gramm"
+        },
+        "units": [
+          24943,
+          91,
+          256,
+          279,
+          226,
+          180,
+          147,
+          389
+        ]
+      },
+      "nutritionalValues": {
+        "calories": 1,
+        "carbs": 0.2,
+        "fat": 0,
+        "fiber": 0.02,
+        "protein": 0.02,
+        "sodium": 2.4
+      }
+    }
+  ],
+  "goals": {
+    "calories": 2000
+  },
+  "notes": [],
+  "summary": {
+    "calories": 1205,
+    "carbs": 101.55,
+    "fat": 39.8,
+    "fiber": 5,
+    "protein": 95.59,
+    "sodium": 499.25,
+    "water": 0
+  }
+}

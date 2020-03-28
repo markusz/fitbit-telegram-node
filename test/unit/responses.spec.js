@@ -43,4 +43,13 @@ describe('Responses', () => {
       expect(_(moment('23:30:00', 'HH:mm:ss').tz('Europe/Berlin'))).to.eql(FitBitMealTypeIds.ANYTIME)
     })
   })
+
+  describe('convertFoodLogJSONToUserFriendlyText', () => {
+    it('correctly converts the json', () => {
+      const jsonLog = require('../fixtures/daily-log.json')
+
+      const _ = ResponseProcessor.convertFoodLogJSONToUserFriendlyText
+      expect(_(jsonLog)).to.be.a('string')
+    })
+  })
 })

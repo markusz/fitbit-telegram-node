@@ -80,20 +80,19 @@ class ResponseProcessor {
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
-    console.log(`json=${json}`)
     const goal = json.goals.calories
     const status = json.summary.calories
-    const maxLength = Math.max(json.foods.map(food => food.loggedFood.name.length()))
-    const foods = json.foods.map(food => `${food.loggedFood.name.padEnd(maxLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(0)}`)
+    const maxLength = Math.max(...json.foods.map(food => food.loggedFood.name.length))
+    const foods = json.foods.map(food => `${food.loggedFood.name.padEnd(maxLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)}`)
 
     const logString = foods.join('\n')
-    const message = `${'Food'.padEnd(maxLength)} | Cal. | % 
-${''.padEnd(maxLength, '-')} | ---- | - 
+    const message = `${'Food'.padEnd(maxLength)} | Cal. |  % 
+${''.padEnd(maxLength, '-')} | ---- | ---- 
 ${logString}
-${''.padEnd(maxLength, '-')} | ---- | - 
-${'Summary'.padEnd(maxLength)} | ${status} | ${(status / goal * 100).toFixed(0)}`
+${''.padEnd(maxLength, '-')} | ---- | ---- 
+${'Summary'.padEnd(maxLength)} | ${status} | ${(status / goal * 100).toFixed(0)}
+${''.padEnd(maxLength, '-')} | ---- | ---- `
 
-    console.log(message)
     return message
   }
 
