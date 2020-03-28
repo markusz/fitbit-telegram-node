@@ -19,11 +19,6 @@ const CORS_HEADERS = {
 
 const MESSAGE_RETRIEVAL_CONFIRMATION = { statusCode: 200 }
 
-const messageReceivedCallback = cb => (message) => {
-  console.log(message)
-  cb(null, { statusCode: 200 })
-}
-
 const storeAccessTokenInDynamoDB = (event) => {
   const accessToken = lodash.get(event, 'queryStringParameters.access_token')
   const userId = lodash.get(event, 'queryStringParameters.user_id')
@@ -73,7 +68,7 @@ exports.FitbitOAuthResponseHandler = async function (event, context) {
     return {
       statusCode: 500,
       headers: CORS_HEADERS,
-      body: JSON.stringify({ status: 'Error', error: err })
+      body: JSON.stringify({ status: 'Error', error: e })
     }
   }
 }
@@ -105,17 +100,19 @@ exports.TelegramMessageHandler = async function (event, context) {
   const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
   const fitBitApiClient = new FitBitApiClient(accessToken)
 
-  console.log(`accessToken=${accessToken}`)
-  console.log(`chatId=${telegramMessage.getChatId()}`)
-
   const message = lodash.get(JSON.parse(event.body), 'message')
   const telegramMessage = TelegramMessage.getInstance(message)
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId())
+
+  console.log(`accessToken=${accessToken}`)
+  console.log(`chatId=${telegramMessage.getChatId()}`)
+  console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
   console.log(telegramMessage.getLowerCaseTextMessage())
   const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
 
   if (queryParams) {
+    console.log('food log')
     const logResult = await fitBitApiClient.logFood(queryParams)
     const logs = await fitBitApiClient.getFoodLog()
     console.log(logResult)
@@ -125,13 +122,14 @@ exports.TelegramMessageHandler = async function (event, context) {
     const budget = lodash.get(logs, 'body.goals.calories', '∞')
 
     const reply = `
-            ${"Calories today:".padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
-            ${"Remaining budget:".padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
+            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
+            ${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
             `
     const telegramAPIReply = await telegramApiClient.replyInTelegramChat(reply)
     console.log(telegramAPIReply)
   } else {
     if (telegramMessage.getLowerCaseTextMessage() === 'init') {
+      console.log('init')
       const url = makeOAuthURLForInitMessage(telegramMessage)
       const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url)
       console.log(telegramAPIReply)
@@ -139,18 +137,21 @@ exports.TelegramMessageHandler = async function (event, context) {
     }
 
     if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
+      console.log('commands')
       const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands())
       console.log(telegramAPIReply)
       return MESSAGE_RETRIEVAL_CONFIRMATION
     }
 
     if (telegramMessage.getLowerCaseTextMessage() === 'log') {
+      console.log('log')
       const foodLog = await fitBitApiClient.getFoodLog()
       const telegramAPIReply = await telegramApiClient.replyInTelegramChat(foodLog)
       console.log(telegramAPIReply)
       return MESSAGE_RETRIEVAL_CONFIRMATION
     }
 
+    console.log('not understood')
     const telegramAPIReply = await telegramApiClient.replyInTelegramChat('Command not understood. Nothing has been logged')
     console.log(telegramAPIReply)
   }
