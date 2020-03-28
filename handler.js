@@ -17,12 +17,9 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Credentials': true
 }
 
-const messageReceivedCallback = cb => (message) => {
-  console.log(message)
-  cb(null, { statusCode: 200 })
-}
+const MESSAGE_RETRIEVAL_CONFIRMATION = { statusCode: 200 }
 
-const handleAccessTokenResponse = (event) => {
+const storeAccessTokenInDynamoDB = (event) => {
   const accessToken = lodash.get(event, 'queryStringParameters.access_token')
   const userId = lodash.get(event, 'queryStringParameters.user_id')
   const chatId = lodash.get(event, 'queryStringParameters.state')
@@ -55,125 +52,109 @@ const makeOAuthURLForInitMessage = (telegramMessage) => {
   return `https://www.fitbit.com/oauth2/authorize?response_type=token&expires_in=31536000&client_id=${process.env.CLIENT_ID}&redirect_uri=${redirectURI}&scope=${scope}&state=${telegramMessage.getChatId()}`
 }
 
-module.exports.FitbitOAuthResponseHandler = (event, context, callback) => {
+exports.FitbitOAuthResponseHandler = async function (event, context) {
   const eventAsString = JSON.stringify(event)
   console.log(eventAsString)
 
-  const request = handleAccessTokenResponse(event)
-  request.then(() => {
-    callback(null, {
+  try {
+    const request = await storeAccessTokenInDynamoDB(event)
+    console.log(request)
+    return {
       statusCode: 200,
       headers: CORS_HEADERS,
       body: JSON.stringify({ status: 'Success' })
-    })
-  })
-
-  request.catch((err) => {
-    callback(null, {
+    }
+  } catch (e) {
+    return {
       statusCode: 500,
       headers: CORS_HEADERS,
-      body: JSON.stringify({ status: 'Error', error: err })
-    })
-  })
+      body: JSON.stringify({ status: 'Error', error: e })
+    }
+  }
 }
 
-module.exports.TelegramMealReminder = (event, context, callback) => {
+exports.TelegramMealReminder = async function (event, context) {
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, process.env.TELEGRAM_CHAT_ID)
 
-  getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID).then((dynamoDBItem) => {
-    const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
-    const fitBitApiClient = new FitBitApiClient(accessToken)
+  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID)
+  const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
 
-    fitBitApiClient
-      .getFoodLog()
-      .then((getLogRes) => {
-        const total = lodash.get(getLogRes, 'body.summary.calories', null)
-        const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
+  const foodLogRes = await new FitBitApiClient(accessToken).getFoodLog()
+  const total = lodash.get(foodLogRes, 'body.summary.calories', null)
+  const budget = lodash.get(foodLogRes, 'body.goals.calories', '∞')
 
-        const reply = `Remaining budget: ${budget - total} / ${budget}.`
-
-        telegramApiClient
-          .replyInTelegramChat(reply)
-          .then(console.log)
-          .catch(console.error)
-      }).catch(console.error)
-  })
+  const reply = `Remaining budget: ${budget - total} / ${budget}.`
+  const replyRes = await telegramApiClient.replyInTelegramChat(reply)
+  console.log(replyRes)
 }
 
-module.exports.TelegramMessageHandler = (event, context, callback) => {
+exports.TelegramMessageHandler = async function (event, context) {
+  // SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
+  const token = lodash.get(event, 'pathParameters.token')
+  if (process.env.SECURITY_TOKEN != token) {
+    console.error(`Request declined. token=${token}`)
+    return MESSAGE_RETRIEVAL_CONFIRMATION
+  }
+
+  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID)
+  const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
+  const fitBitApiClient = new FitBitApiClient(accessToken)
+
   const message = lodash.get(JSON.parse(event.body), 'message')
   const telegramMessage = TelegramMessage.getInstance(message)
-  const token = lodash.get(event, 'pathParameters.token')
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId())
-  const masterCallback = messageReceivedCallback(callback)
 
+  console.log(`accessToken=${accessToken}`)
   console.log(`chatId=${telegramMessage.getChatId()}`)
   console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
-  getAccessTokenForChatId(telegramMessage.getChatId()).then((dynamoDBItem) => {
-    const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
-    console.log(`accessToken=${accessToken}`)
+  console.log(telegramMessage.getLowerCaseTextMessage())
+  const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
 
-    const fitBitApiClient = new FitBitApiClient(accessToken)
-    // Telegram expects a HTTP200 response to acknowlege receiving the message -> One cb fits all
+  if (queryParams) {
+    console.log('food log')
+    const logResult = await fitBitApiClient.logFood(queryParams)
+    const logs = await fitBitApiClient.getFoodLog()
+    console.log(logResult)
+    console.log(logs)
+
+    const total = lodash.get(logs, 'body.summary.calories', null)
+    const budget = lodash.get(logs, 'body.goals.calories', '∞')
+
+    const reply = `
+            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
+            ${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
+            `
+    const telegramAPIReply = await telegramApiClient.replyInTelegramChat(reply)
+    console.log(telegramAPIReply)
+  } else {
     if (telegramMessage.getLowerCaseTextMessage() === 'init') {
+      console.log('init')
       const url = makeOAuthURLForInitMessage(telegramMessage)
-      return telegramApiClient.replyInTelegramChat(url)
-        .then(masterCallback)
-        .catch(masterCallback)
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url)
+      console.log(telegramAPIReply)
+      return MESSAGE_RETRIEVAL_CONFIRMATION
     }
 
     if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
-      const cmds = ResponseProcessor.getPossibleCommands()
-      return telegramApiClient.replyInTelegramChat(cmds)
-        .then(masterCallback)
-        .catch(masterCallback)
+      console.log('commands')
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands())
+      console.log(telegramAPIReply)
+      return MESSAGE_RETRIEVAL_CONFIRMATION
     }
 
     if (telegramMessage.getLowerCaseTextMessage() === 'log') {
-      console.log('in logs')
-      const foodLog = fitBitApiClient.getFoodLog().then((logRes) => {
-        console.log(logRes)
-        return telegramApiClient.replyInTelegramChat(logRes)
-          .then(masterCallback)
-          .catch(masterCallback)
-      })
+      console.log('log')
+      const foodLog = await fitBitApiClient.getFoodLog()
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(foodLog)
+      console.log(telegramAPIReply)
+      return MESSAGE_RETRIEVAL_CONFIRMATION
     }
 
-    // SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
-    if (process.env.SECURITY_TOKEN != token) {
-      console.error(`Request declined. token=${token}`)
-      return callback(null, { statusCode: 200 })
-    }
+    console.log('not understood')
+    const telegramAPIReply = await telegramApiClient.replyInTelegramChat('Command not understood. Nothing has been logged')
+    console.log(telegramAPIReply)
+  }
 
-    const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
-    console.log(queryParams)
-
-    if (!queryParams) {
-      return telegramApiClient.replyInTelegramChat('Command not understood. Nothing has been logged')
-        .then(masterCallback)
-        .catch(masterCallback)
-    }
-
-    fitBitApiClient
-      .logFood(queryParams)
-      .then((logRes) => {
-        console.log(logRes)
-        fitBitApiClient
-          .getFoodLog().then((getLogRes) => {
-            console.log(getLogRes)
-            const total = lodash.get(getLogRes, 'body.summary.calories', null)
-            const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
-
-            const reply = `
-            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}
-            ${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
-            `
-
-            telegramApiClient.replyInTelegramChat(reply)
-              .then(masterCallback)
-              .catch(masterCallback)
-          }).catch(masterCallback)
-      }).catch(masterCallback)
-  }).catch(masterCallback)
+  return MESSAGE_RETRIEVAL_CONFIRMATION
 }
