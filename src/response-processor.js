@@ -87,7 +87,7 @@ class ResponseProcessor {
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
-    const horizontalSeparator = " | "
+    const horizontalSeparator = ' | '
     const availChars = 37
     const secondColumnLength = 4
     const thirdColumnLength = 5
