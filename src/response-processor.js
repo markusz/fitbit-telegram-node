@@ -87,7 +87,7 @@ class ResponseProcessor {
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
-    const firstColumnLength = 23
+    const firstColumnLength = 22
     const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ---- `
 
     const stringElements = [
