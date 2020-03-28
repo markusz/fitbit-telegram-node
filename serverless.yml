@@ -47,6 +47,7 @@ functions:
       - schedule: cron(55 6 * * ? *)
       - schedule: cron(55 10 * * ? *)
       - schedule: cron(55 17 * * ? *)
+      - schedule: cron(55 21 * * ? *)
   receiveOAuthAccessToken:
       handler: handler.FitbitOAuthResponseHandler
       events:
