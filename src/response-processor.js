@@ -90,7 +90,8 @@ class ResponseProcessor {
     const firstColumnLength = 22
     const secondColumnLength = 4
     const thirdColumnLength = 5
-    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ----- `
+    const percentDecimals = 1
+    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | -----`
 
     const stringElements = [
       '```',
@@ -111,14 +112,14 @@ class ResponseProcessor {
 
       const mobileFriendlyName = ResponseProcessor.fitMsg(foodEntry.loggedFood.name, firstColumnLength)
       const calories = foodEntry.nutritionalValues.calories.toString().padStart(secondColumnLength)
-      const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(thirdColumnLength)
+      const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(percentDecimals).toString().padStart(thirdColumnLength)
       const message = `${mobileFriendlyName} | ${calories} | ${percentageOfDailyBudget}`
       stringElements.push(message)
     }
 
     stringElements.push(separator)
-    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(secondColumnLength)} | ${(status / goal * 100).toFixed(1).padStart(thirdColumnLength)}`)
-    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(secondColumnLength)} | ${((goal - status) / goal * 100).toFixed(1).padStart(thirdColumnLength)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(secondColumnLength)} | ${(status / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(secondColumnLength)} | ${((goal - status) / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`)
     stringElements.push(separator)
     stringElements.push('```')
 
