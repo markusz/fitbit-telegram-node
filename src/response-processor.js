@@ -88,12 +88,14 @@ class ResponseProcessor {
 
   static convertFoodLogJSONToUserFriendlyText (json) {
     const firstColumnLength = 22
-    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ---- `
+    const secondColumnLength = 4
+    const thirdColumnLength = 5
+    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ----- `
 
     const stringElements = [
       '```',
       separator,
-      `${ResponseProcessor.fitMsg('Food', firstColumnLength)} | kcal |  %`
+      `${ResponseProcessor.fitMsg('Food', firstColumnLength)} | kcal |   %`
     ]
 
     const goal = json.goals.calories
@@ -108,15 +110,15 @@ class ResponseProcessor {
       }
 
       const mobileFriendlyName = ResponseProcessor.fitMsg(foodEntry.loggedFood.name, firstColumnLength)
-      const calories = foodEntry.nutritionalValues.calories.toString().padStart(4)
-      const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)
+      const calories = foodEntry.nutritionalValues.calories.toString().padStart(secondColumnLength)
+      const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(thirdColumnLength)
       const message = `${mobileFriendlyName} | ${calories} | ${percentageOfDailyBudget}`
       stringElements.push(message)
     }
 
     stringElements.push(separator)
-    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}`)
-    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(4)} | ${((goal - status) / goal * 100).toFixed(1).padStart(4)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(secondColumnLength)} | ${(status / goal * 100).toFixed(1).padStart(thirdColumnLength)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(secondColumnLength)} | ${((goal - status) / goal * 100).toFixed(1).padStart(thirdColumnLength)}`)
     stringElements.push(separator)
     stringElements.push('```')
 
