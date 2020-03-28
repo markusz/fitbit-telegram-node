@@ -19,7 +19,8 @@ class TelegramApiClient {
     return superagent.get(`${this.baseURL}/sendMessage`)
       .query({
         chat_id: this.chatId,
-        text: message
+        text: message,
+        parse_mode: 'MarkdownV2'
       })
   }
 
