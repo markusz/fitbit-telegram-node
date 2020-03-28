@@ -100,7 +100,7 @@ ${''.padEnd(firstColumnLength, '-')} | ---- | ----
 ${logString}
 ${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
 ${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}
-${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal-status).toString().padStart(4)} | ${((goal-status) / goal * 100).toFixed(1).padStart(4)}
+${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(4)} | ${((goal - status) / goal * 100).toFixed(1).padStart(4)}
 ${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
 \`\`\``
 
