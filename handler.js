@@ -109,17 +109,9 @@ exports.TelegramMessageHandler = async function (event, context) {
   if (queryParams) {
     console.log('command=log-food')
     const logResult = await fitBitApiClient.logFood(queryParams)
+    console.log(`log-result=${JSON.stringify(logResult)}`)
     const logs = await fitBitApiClient.getFoodLog()
-    console.log(logResult)
-    console.log(JSON.stringify(logs.body))
-
-    const total = lodash.get(logs, 'body.summary.calories', null)
-    const budget = lodash.get(logs, 'body.goals.calories', '∞')
-
-    const reply = `
-            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
-            `
-    const telegramAPIReply = await telegramApiClient.replyInTelegramChat(reply)
+    const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
     console.log(`reply=${telegramAPIReply}`)
   } else {
     if (telegramMessage.getLowerCaseTextMessage() === 'init') {
