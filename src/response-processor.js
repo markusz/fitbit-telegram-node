@@ -86,8 +86,7 @@ class ResponseProcessor {
     const maxLength = Math.max(json.foods.map(food => food.loggedFood.name.length()))
     const foods = json.foods.map(food => `${food.loggedFood.name.padEnd(maxLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(0)}`)
 
-    const messageParts = Responses.map(res => `${res.meta[0].toString()} => ${res.meta[2].toString()}`)
-    const logString = messageParts.join('\n')
+    const logString = foods.join('\n')
     const message = `${'Food'.padEnd(maxLength)} | Cal. | % 
 ${''.padEnd(maxLength, '-')} | ---- | - 
 ${logString}
