@@ -80,10 +80,7 @@ class ResponseProcessor {
   }
 
   static fitMsg (msg, maxLength) {
-    console.log(msg, maxLength)
-    const s = msg.padEnd(maxLength).slice(0, maxLength)
-    console.log(s)
-    return s
+    return msg.padEnd(maxLength).slice(0, maxLength)
   }
 
   static convertFoodLogJSONToUserFriendlyText (json) {
