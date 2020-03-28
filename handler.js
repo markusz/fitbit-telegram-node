@@ -133,8 +133,8 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
       const foodLog = fitBitApiClient.getFoodLog().then((logRes) => {
         console.log(logRes)
         return telegramApiClient.replyInTelegramChat(foodLog)
-            .then(masterCallback)
-            .catch(masterCallback)
+          .then(masterCallback)
+          .catch(masterCallback)
       })
     }
 
@@ -157,7 +157,7 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
 
     fitBitApiClient
       .logFood(queryParams)
-      .then(( logRes ) => {
+      .then((logRes) => {
         console.log(logRes)
         fitBitApiClient
           .getFoodLog().then((getLogRes) => {
@@ -166,8 +166,8 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
             const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
 
             const reply = `
-            ${"Calories today:".padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
-            ${"Remaining budget:".padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
+            ${'Calories today:'.padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
+            ${'Remaining budget:'.padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
             `
 
             telegramApiClient.replyInTelegramChat(reply)
