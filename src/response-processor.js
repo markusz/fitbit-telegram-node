@@ -23,19 +23,19 @@ class ResponseProcessor {
       return FitBitMealTypeIds.BREAKFAST
     }
 
-    if (time.isBetween(moment('09:30:00', timePattern), moment('11:30:00', timePattern), null, '(]')) {
+    if (time.isBetween(moment('09:30:00', timePattern), moment('11:00:00', timePattern), null, '(]')) {
       return FitBitMealTypeIds.MORNING_SNACK
     }
 
-    if (time.isBetween(moment('11:30:00', timePattern), moment('13:30:00', timePattern), null, '(]')) {
+    if (time.isBetween(moment('11:00:00', timePattern), moment('13:30:00', timePattern), null, '(]')) {
       return FitBitMealTypeIds.LUNCH
     }
 
-    if (time.isBetween(moment('13:30:00', timePattern), moment('18:00:00', timePattern), null, '(]')) {
+    if (time.isBetween(moment('13:30:00', timePattern), moment('17:00:00', timePattern), null, '(]')) {
       return FitBitMealTypeIds.AFTERNOON
     }
 
-    if (time.isBetween(moment('18:00:00', timePattern), moment('20:30:00', timePattern), null, '(]')) {
+    if (time.isBetween(moment('17:00:00', timePattern), moment('20:30:00', timePattern), null, '(]')) {
       return FitBitMealTypeIds.DINNER
     }
 
@@ -91,7 +91,7 @@ class ResponseProcessor {
     const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ---- `
 
     const stringElements = [
-      "```",
+      '```',
       separator,
       `${ResponseProcessor.fitMsg('Food', firstColumnLength)} | kcal |  %`
     ]
@@ -118,7 +118,7 @@ class ResponseProcessor {
     stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}`)
     stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(4)} | ${((goal - status) / goal * 100).toFixed(1).padStart(4)}`)
     stringElements.push(separator)
-    stringElements.push("```")
+    stringElements.push('```')
 
     const logString = stringElements.join('\n')
     console.log(logString)
