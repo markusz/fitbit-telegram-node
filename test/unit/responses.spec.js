@@ -49,7 +49,9 @@ describe('Responses', () => {
       const jsonLog = require('../fixtures/daily-log.json')
 
       const _ = ResponseProcessor.convertFoodLogJSONToUserFriendlyText
-      expect(_(jsonLog)).to.be.a('string')
+      const result = _(jsonLog)
+      //console.log(result)
+      expect(result).to.be.a('string')
     })
   })
 })

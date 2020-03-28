@@ -79,20 +79,28 @@ class ResponseProcessor {
     }
   }
 
+  static fitMsg (msg, maxLength) {
+    console.log(msg, maxLength)
+    const s = msg.padEnd(maxLength).slice(0, maxLength)
+    console.log(s)
+    return s
+  }
+
   static convertFoodLogJSONToUserFriendlyText (json) {
+    const firstColumnLength = 22
+
     const goal = json.goals.calories
     const status = json.summary.calories
-    const maxLength = Math.max(...json.foods.map(food => food.loggedFood.name.length))
-    const foods = json.foods.map(food => `${food.loggedFood.name.padEnd(maxLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)}`)
+    const foods = json.foods.map(food => `${ResponseProcessor.fitMsg(food.loggedFood.name, firstColumnLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)}`)
 
     const logString = foods.join('\n')
     const message = `\`\`\`
-${'Food'.padEnd(maxLength)} | Cal. |  % 
-${''.padEnd(maxLength, '-')} | ---- | ---- 
+${ResponseProcessor.fitMsg('Food', firstColumnLength)} | Cal. |  % 
+${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
 ${logString}
-${''.padEnd(maxLength, '-')} | ---- | ---- 
-${'Summary'.padEnd(maxLength)} | ${status} | ${(status / goal * 100).toFixed(0)}
-${''.padEnd(maxLength, '-')} | ---- | ---- 
+${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
+${ResponseProcessor.fitMsg('Summary', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}
+${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
 \`\`\``
 
     return message
