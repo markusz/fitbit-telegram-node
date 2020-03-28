@@ -88,23 +88,41 @@ class ResponseProcessor {
 
   static convertFoodLogJSONToUserFriendlyText (json) {
     const firstColumnLength = 23
+    const separator = `${''.padEnd(firstColumnLength, '-')} | ---- | ---- `
+
+    const stringElements = [
+      "```",
+      separator,
+      `${ResponseProcessor.fitMsg('Food', firstColumnLength)} | kcal |  %`
+    ]
 
     const goal = json.goals.calories
     const status = json.summary.calories
-    const foods = json.foods.map(food => `${ResponseProcessor.fitMsg(food.loggedFood.name, firstColumnLength)} | ${food.nutritionalValues.calories.toString().padStart(4)} | ${(food.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)}`)
 
-    const logString = foods.join('\n')
-    const message = `\`\`\`
-${ResponseProcessor.fitMsg('Food', firstColumnLength)} | Cal. |  % 
-${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
-${logString}
-${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
-${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}
-${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(4)} | ${((goal - status) / goal * 100).toFixed(1).padStart(4)}
-${''.padEnd(firstColumnLength, '-')} | ---- | ---- 
-\`\`\``
+    let mealTypeId = -1
+    for (let i = 0; i < json.foods.length; i++) {
+      const foodEntry = json.foods[i]
+      if (foodEntry.loggedFood.mealTypeId > mealTypeId) {
+        mealTypeId = foodEntry.loggedFood.mealTypeId
+        stringElements.push(separator)
+      }
 
-    return message
+      const mobileFriendlyName = ResponseProcessor.fitMsg(foodEntry.loggedFood.name, firstColumnLength)
+      const calories = foodEntry.nutritionalValues.calories.toString().padStart(4)
+      const percentageOfDailyBudget = (foodEntry.nutritionalValues.calories / goal * 100).toFixed(1).toString().padStart(4)
+      const message = `${mobileFriendlyName} | ${calories} | ${percentageOfDailyBudget}`
+      stringElements.push(message)
+    }
+
+    stringElements.push(separator)
+    stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)} | ${status.toString().padStart(4)} | ${(status / goal * 100).toFixed(1).padStart(4)}`)
+    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)} | ${(goal - status).toString().padStart(4)} | ${((goal - status) / goal * 100).toFixed(1).padStart(4)}`)
+    stringElements.push(separator)
+    stringElements.push("```")
+
+    const logString = stringElements.join('\n')
+    console.log(logString)
+    return logString
   }
 
   static getPossibleCommands () {
