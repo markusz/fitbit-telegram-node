@@ -15,7 +15,7 @@ class TelegramApiClient {
   }
 
   replyInTelegramChat (message) {
-    console.log(`Called with ${message}`)
+    console.log(`Replying to Telegram with message=${message}`)
     return superagent.get(`${this.baseURL}/sendMessage`)
       .query({
         chat_id: this.chatId,
