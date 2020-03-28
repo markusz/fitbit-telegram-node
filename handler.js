@@ -79,13 +79,9 @@ exports.TelegramMealReminder = async function (event, context) {
   const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID)
   const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
 
-  const foodLogRes = await new FitBitApiClient(accessToken).getFoodLog()
-  const total = lodash.get(foodLogRes, 'body.summary.calories', null)
-  const budget = lodash.get(foodLogRes, 'body.goals.calories', '∞')
-
-  const reply = `Remaining budget: ${budget - total} / ${budget}.`
-  const replyRes = await telegramApiClient.replyInTelegramChat(reply)
-  console.log(replyRes)
+  const foodLog = await new FitBitApiClient(accessToken).getFoodLog()
+  const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
+  console.log(`telegram-resp=${telegramAPIReply}`)
 }
 
 exports.TelegramMessageHandler = async function (event, context) {

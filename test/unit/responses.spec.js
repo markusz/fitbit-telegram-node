@@ -50,7 +50,7 @@ describe('Responses', () => {
 
       const _ = ResponseProcessor.convertFoodLogJSONToUserFriendlyText
       const result = _(jsonLog)
-      //console.log(result)
+      // console.log(result)
       expect(result).to.be.a('string')
     })
   })
