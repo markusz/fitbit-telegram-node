@@ -129,6 +129,15 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
         .catch(masterCallback)
     }
 
+    if (telegramMessage.getLowerCaseTextMessage() === 'log') {
+      const foodLog = fitBitApiClient.getFoodLog().then((logRes) => {
+        console.log(logRes)
+        return telegramApiClient.replyInTelegramChat(foodLog)
+            .then(masterCallback)
+            .catch(masterCallback)
+      })
+    }
+
     // SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
     if (process.env.SECURITY_TOKEN != token) {
       console.error(`Request declined. token=${token}`)
@@ -148,13 +157,18 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
 
     fitBitApiClient
       .logFood(queryParams)
-      .then((/* logRes */) => {
+      .then(( logRes ) => {
+        console.log(logRes)
         fitBitApiClient
           .getFoodLog().then((getLogRes) => {
             console.log(getLogRes)
             const total = lodash.get(getLogRes, 'body.summary.calories', null)
             const budget = lodash.get(getLogRes, 'body.goals.calories', '∞')
-            const reply = `Calories today: ${total}\nRemaining budget: ${budget - total} / ${budget}`
+
+            const reply = `
+            ${"Calories today:".padEnd(20, ' ')} ${total.toString().padStart(4, ' ')}\n
+            ${"Remaining budget:".padEnd(20, ' ')} ${(budget - total).toString().padStart(4, ' ')}
+            `
 
             telegramApiClient.replyInTelegramChat(reply)
               .then(masterCallback)
