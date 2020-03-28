@@ -131,9 +131,10 @@ module.exports.TelegramMessageHandler = (event, context, callback) => {
     }
 
     if (telegramMessage.getLowerCaseTextMessage() === 'log') {
+      console.log('in logs')
       const foodLog = fitBitApiClient.getFoodLog().then((logRes) => {
         console.log(logRes)
-        return telegramApiClient.replyInTelegramChat(foodLog)
+        return telegramApiClient.replyInTelegramChat(logRes)
           .then(masterCallback)
           .catch(masterCallback)
       })
