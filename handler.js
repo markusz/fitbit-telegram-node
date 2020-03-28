@@ -146,7 +146,7 @@ exports.TelegramMessageHandler = async function (event, context) {
       const foodLog = await fitBitApiClient.getFoodLog()
       const logsBody = JSON.stringify(foodLog.body)
       console.log(logsBody)
-      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(logsBody)
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
       console.log(`reply=${telegramAPIReply}`)
       return MESSAGE_RETRIEVAL_CONFIRMATION
     }
