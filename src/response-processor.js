@@ -19,30 +19,39 @@ class ResponseProcessor {
     return new ResponseProcessor(message)
   }
 
+  static isTimeBetween (time, timeA, timeB, inclusivity = '(]') {
+    const timePattern = 'HH:mm:ss'
+    const before = moment(timeA, timePattern)
+    const after = moment(timeB, timePattern)
+    const isBetween = time.isBetween(before, after, null, inclusivity)
+    console.log(time.format(), before.format(), after.format(), isBetween)
+    return isBetween
+  }
+
   static getMealTypeByTime (time = moment().tz('Europe/Berlin')) {
     console.log(`time=${time.format('YYYY-MM-DD HH:mm:ss')}`)
-    const timePattern = 'HH:mm:ss'
-    if (time.isBetween(moment('06:00:00', timePattern), moment('09:30:00', timePattern), null, '[]')) {
+
+    if (ResponseProcessor.isTimeBetween(time, '06:00:00', '09:30:00', '[]')) {
       return FitBitMealTypeIds.BREAKFAST
     }
 
-    if (time.isBetween(moment('09:30:00', timePattern), moment('11:00:00', timePattern), null, '(]')) {
+    if (ResponseProcessor.isTimeBetween(time, '09:30:00', '11:00:00')) {
       return FitBitMealTypeIds.MORNING_SNACK
     }
 
-    if (time.isBetween(moment('11:00:00', timePattern), moment('13:30:00', timePattern), null, '(]')) {
+    if (ResponseProcessor.isTimeBetween(time, '11:00:00', '13:30:00')) {
       return FitBitMealTypeIds.LUNCH
     }
 
-    if (time.isBetween(moment('13:30:00', timePattern), moment('17:00:00', timePattern), null, '(]')) {
+    if (ResponseProcessor.isTimeBetween(time, '13:30:00', '17:00:00')) {
       return FitBitMealTypeIds.AFTERNOON
     }
 
-    if (time.isBetween(moment('17:00:00', timePattern), moment('20:30:00', timePattern), null, '(]')) {
+    if (ResponseProcessor.isTimeBetween(time, '17:00:00', '20:30:00')) {
       return FitBitMealTypeIds.DINNER
     }
 
-    if (time.isBetween(moment('20:30:00', timePattern), moment('23:00:00', timePattern), null, '(]')) {
+    if (ResponseProcessor.isTimeBetween(time, '20:30:00', '23:00:00')) {
       return FitBitMealTypeIds.EVENING_SNACK
     }
 
@@ -73,8 +82,6 @@ class ResponseProcessor {
   }
 
   static getLogRequestParamsForFood (amount, foodId, unitId = FitBitUnitIds.GRAMM, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
-
-
     return {
       amount,
       foodId,
@@ -142,8 +149,6 @@ class ResponseProcessor {
   static getLogRequestParamsForCalories (calories, foodName = moment()
     .tz('Europe/Berlin')
     .format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
-
-
     return {
       foodName,
       unitId,
