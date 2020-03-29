@@ -102,7 +102,7 @@ exports.TelegramMessageHandler = async function (event, context) {
 
   // console.log(`accessToken=${accessToken}`)
   console.log(`chatId=${telegramMessage.getChatId()}`)
-  console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
+  console.log(`messageId=${telegramMessage.getMessageId()}, message=${telegramMessage.getLowerCaseTextMessage()}`)
 
   try {
     const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
@@ -143,6 +143,7 @@ exports.TelegramMessageHandler = async function (event, context) {
     return MESSAGE_RETRIEVAL_CONFIRMATION
   } catch (e) {
     console.error(e)
+    await telegramApiClient.replyInTelegramChat('```\nServer Error\n```')
     return MESSAGE_RETRIEVAL_CONFIRMATION
   }
 }

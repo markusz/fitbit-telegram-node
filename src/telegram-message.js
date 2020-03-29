@@ -24,6 +24,10 @@ class TelegramMessage {
   getChatId () {
     return this.message.chat.id
   }
+
+  getMessageId () {
+    return this.message.message_id
+  }
 }
 
 module.exports = {
