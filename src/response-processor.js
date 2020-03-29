@@ -18,6 +18,7 @@ class ResponseProcessor {
   }
 
   static getMealTypeByTime (time = moment().tz('Europe/Berlin')) {
+    console.log(`time=${time.format('YYYY-MM-DD HH:mm:ss')}`)
     const timePattern = 'HH:mm:ss'
     if (time.isBetween(moment('06:00:00', timePattern), moment('09:30:00', timePattern), null, '[]')) {
       return FitBitMealTypeIds.BREAKFAST
@@ -131,7 +132,7 @@ class ResponseProcessor {
 
   static getPossibleCommands () {
     const messageParts = Responses.map(res => `${res.meta[0].toString()} => ${res.meta[2].toString()}`)
-    return messageParts.join('\n')
+    return '```\n'+messageParts.join('\n')+'```'
   }
 
   static getLogRequestParamsForCalories (calories, foodName = moment()
