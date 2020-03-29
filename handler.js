@@ -140,7 +140,7 @@ exports.TelegramMessageHandler = async function (event, context) {
       }
 
       console.log('command=not-understood')
-      const telegramAPIReply = await telegramApiClient.replyInTelegramChat('```Command not understood```')
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat('```\nCommand not understood\n```')
       console.log(`reply=${telegramAPIReply}`)
     }
     return MESSAGE_RETRIEVAL_CONFIRMATION
