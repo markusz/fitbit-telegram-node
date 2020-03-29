@@ -10,3 +10,4 @@ fitbit-telegram-node.iml
 /fitbit-telegram-node.iml
 /config.yml
 /.nyc_output/
+/coverage/

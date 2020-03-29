@@ -14,6 +14,10 @@ class TelegramApiClient {
     return new TelegramApiClient(botToken, chatId)
   }
 
+  static logTelegramAPIReply (superagentRes) {
+    console.log(`status=${superagentRes.status}, result=${superagentRes.body.result}`)
+  }
+
   replyInTelegramChat (message, formatted = true) {
     console.log(`Replying to Telegram with message=${message}`)
     const params = {
@@ -24,7 +28,10 @@ class TelegramApiClient {
     if (formatted) {
       params.parse_mode = 'MarkdownV2'
     }
-    return superagent.get(`${this.baseURL}/sendMessage`).query(params)
+    return superagent
+      .get(`${this.baseURL}/sendMessage`)
+      .set('Accept', 'application/json')
+      .query(params)
   }
 
   static getQueryParamsForFoodLog (message) {
