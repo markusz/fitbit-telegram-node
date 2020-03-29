@@ -104,45 +104,49 @@ exports.TelegramMessageHandler = async function (event, context) {
   console.log(`chatId=${telegramMessage.getChatId()}`)
   console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
-  const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
-
-  if (queryParams) {
-    console.log('command=log-food')
-    const logResult = await fitBitApiClient.logFood(queryParams)
-    console.log(`log-result=${JSON.stringify(logResult)}`)
-    const logs = await fitBitApiClient.getFoodLog()
-    const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
-    console.log(`reply=${telegramAPIReply}`)
-  } else {
-    if (telegramMessage.getLowerCaseTextMessage() === 'init') {
-      console.log('command=init-flow')
-      const url = makeOAuthURLForInitMessage(telegramMessage)
-      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url)
+  try {
+    const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
+    if (queryParams) {
+      console.log('command=log-food')
+      const logResult = await fitBitApiClient.logFood(queryParams)
+      console.log(`log-result=${JSON.stringify(logResult)}`)
+      const logs = await fitBitApiClient.getFoodLog()
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
       console.log(`reply=${telegramAPIReply}`)
-      return MESSAGE_RETRIEVAL_CONFIRMATION
-    }
+    } else {
+      if (telegramMessage.getLowerCaseTextMessage() === 'init') {
+        console.log('command=init-flow')
+        const url = makeOAuthURLForInitMessage(telegramMessage)
+        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url)
+        console.log(`reply=${telegramAPIReply}`)
+        return MESSAGE_RETRIEVAL_CONFIRMATION
+      }
 
-    if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
-      console.log('command=get-commands')
-      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands())
+      if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
+        console.log('command=get-commands')
+        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands())
+        console.log(`reply=${telegramAPIReply}`)
+        return MESSAGE_RETRIEVAL_CONFIRMATION
+      }
+
+      if (telegramMessage.getLowerCaseTextMessage() === 'log') {
+        console.log('command=get-log')
+        const foodLog = await fitBitApiClient.getFoodLog()
+        const logsBody = JSON.stringify(foodLog.body)
+        console.log(logsBody)
+        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
+        console.log(`reply=${telegramAPIReply}`)
+        return MESSAGE_RETRIEVAL_CONFIRMATION
+      }
+
+      console.log('command=not-understood')
+      const telegramAPIReply = await telegramApiClient.replyInTelegramChat('Command not understood. Nothing has been logged')
       console.log(`reply=${telegramAPIReply}`)
-      return MESSAGE_RETRIEVAL_CONFIRMATION
     }
-
-    if (telegramMessage.getLowerCaseTextMessage() === 'log') {
-      console.log('command=get-log')
-      const foodLog = await fitBitApiClient.getFoodLog()
-      const logsBody = JSON.stringify(foodLog.body)
-      console.log(logsBody)
-      const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
-      console.log(`reply=${telegramAPIReply}`)
-      return MESSAGE_RETRIEVAL_CONFIRMATION
-    }
-
-    console.log('command=not-understood')
-    const telegramAPIReply = await telegramApiClient.replyInTelegramChat('Command not understood. Nothing has been logged')
-    console.log(`reply=${telegramAPIReply}`)
+    return MESSAGE_RETRIEVAL_CONFIRMATION
+  } catch (e) {
+    console.error(e)
+    return MESSAGE_RETRIEVAL_CONFIRMATION
   }
 
-  return MESSAGE_RETRIEVAL_CONFIRMATION
 }
