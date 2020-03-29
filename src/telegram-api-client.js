@@ -14,7 +14,7 @@ class TelegramApiClient {
     return new TelegramApiClient(botToken, chatId)
   }
 
-  replyInTelegramChat (message, formatted = false) {
+  replyInTelegramChat (message, formatted = true) {
     console.log(`Replying to Telegram with message=${message}`)
     const params = {
       chat_id: this.chatId,
