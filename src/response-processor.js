@@ -141,8 +141,8 @@ class ResponseProcessor {
   }
 
   static getPossibleCommands () {
-    const messageParts = Responses.map(res => `${''.padEnd(MESSAGE_MAX_LINE_LENGTH, '-')}\n${ResponseProcessor.fitMsg(res.meta[2].toString(), MESSAGE_MAX_LINE_LENGTH)}\n${res.meta[0].toString()}`)
-    return messageParts.join('\n')
+    const messageParts = Responses.map(res => `${res.meta[0].toString()}`)
+    return '```\n'+messageParts.join('\n')+'\n```'
   }
 
   static getLogRequestParamsForCalories (calories, foodName = moment.tz('Europe/Berlin')
