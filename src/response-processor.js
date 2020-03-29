@@ -11,7 +11,7 @@ class ResponseProcessor {
     this.config = Responses.find(res => res.meta[0].test(message))
     this.message = {
       text: message,
-      timestamp: moment()
+      timestamp: moment.tz("Europe/Berlin")
     }
   }
 
@@ -21,14 +21,14 @@ class ResponseProcessor {
 
   static isTimeBetween (time, timeA, timeB, inclusivity = '(]') {
     const timePattern = 'HH:mm:ss'
-    const before = moment(timeA, timePattern).tz('Europe/Berlin')
-    const after = moment(timeB, timePattern).tz('Europe/Berlin')
+    const before = moment.tz(timeA, timePattern, 'Europe/Berlin')
+    const after = moment.tz(timeB, timePattern, 'Europe/Berlin')
     const isBetween = time.isBetween(before, after, null, inclusivity)
     // console.log(time.format(), before.format(), after.format(), isBetween)
     return isBetween
   }
 
-  static getMealTypeByTime (time = moment().tz('Europe/Berlin')) {
+  static getMealTypeByTime (time = moment.tz("Europe/Berlin")) {
     console.log(`time=${time.format('YYYY-MM-DD HH:mm:ss')}`)
 
     if (ResponseProcessor.isTimeBetween(time, '06:00:00', '09:30:00', '[]')) {
@@ -81,7 +81,7 @@ class ResponseProcessor {
     return null
   }
 
-  static getLogRequestParamsForFood (amount, foodId, unitId = FitBitUnitIds.GRAMM, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
+  static getLogRequestParamsForFood (amount, foodId, unitId = FitBitUnitIds.GRAMM, date = moment.tz("Europe/Berlin").format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
     return {
       amount,
       foodId,
@@ -145,9 +145,8 @@ class ResponseProcessor {
     return '```\n' + messageParts.join('\n') + '\n```'
   }
 
-  static getLogRequestParamsForCalories (calories, foodName = moment()
-    .tz('Europe/Berlin')
-    .format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment().tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
+  static getLogRequestParamsForCalories (calories, foodName = moment.tz("Europe/Berlin")
+    .format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment.tz("Europe/Berlin").format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
     return {
       foodName,
       unitId,
