@@ -123,7 +123,7 @@ exports.TelegramMessageHandler = async function (event, context) {
 
       if (telegramMessage.getLowerCaseTextMessage() === 'commands') {
         console.log('command=get-commands')
-        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands())
+        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.getPossibleCommands(), false)
         TelegramApiClient.logTelegramAPIReply(telegramAPIReply)
         return MESSAGE_RETRIEVAL_CONFIRMATION
       }
