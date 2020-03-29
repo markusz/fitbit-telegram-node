@@ -14,14 +14,18 @@ class TelegramApiClient {
     return new TelegramApiClient(botToken, chatId)
   }
 
-  replyInTelegramChat (message) {
+  replyInTelegramChat (message, formatted = false) {
     console.log(`Replying to Telegram with message=${message}`)
+    const params = {
+      chat_id: this.chatId,
+      text: message
+    }
+
+    if (formatted) {
+      params.parse_mode = 'MarkdownV2'
+    }
     return superagent.get(`${this.baseURL}/sendMessage`)
-      .query({
-        chat_id: this.chatId,
-        text: message,
-        parse_mode: 'MarkdownV2'
-      })
+      .query(params)
   }
 
   static getQueryParamsForFoodLog (message) {

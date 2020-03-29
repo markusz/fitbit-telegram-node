@@ -4,6 +4,8 @@ const moment = require('moment-timezone')
 const { FitBitMealTypeIds, FitBitUnitIds } = require('../config/constants')
 const { Responses, Actions } = require('../config/responses')
 
+const MESSAGE_MAX_LINE_LENGTH = 37
+
 class ResponseProcessor {
   constructor (message) {
     this.config = Responses.find(res => res.meta[0].test(message))
@@ -86,13 +88,13 @@ class ResponseProcessor {
 
   static convertFoodLogJSONToUserFriendlyText (json) {
     const horizontalSeparator = ' | '
-    const availChars = 37
+
     const secondColumnLength = 4
     const thirdColumnLength = 5
     const percentDecimals = 1
     const separatorSpaceLength = horizontalSeparator.length * 2
 
-    const firstColumnLength = availChars - (secondColumnLength + thirdColumnLength + percentDecimals + separatorSpaceLength)
+    const firstColumnLength = MESSAGE_MAX_LINE_LENGTH - (secondColumnLength + thirdColumnLength + percentDecimals + separatorSpaceLength)
     const separator = `${''.padEnd(firstColumnLength, '-')}${horizontalSeparator}${''.padEnd(secondColumnLength, '-')}${horizontalSeparator}${''.padEnd(thirdColumnLength, '-')}`
 
     const stringElements = [
@@ -131,8 +133,8 @@ class ResponseProcessor {
   }
 
   static getPossibleCommands () {
-    const messageParts = Responses.map(res => `${res.meta[0].toString()} => ${res.meta[2].toString()}`)
-    return '```\n' + messageParts.join('\n') + '```'
+    const messageParts = Responses.map(res => `${''.padEnd(MESSAGE_MAX_LINE_LENGTH, '-')}\n${ResponseProcessor.fitMsg(res.meta[2].toString(), MESSAGE_MAX_LINE_LENGTH)}\n${res.meta[0].toString()}`)
+    return '```\n' + messageParts.join('\n') + '\n```'
   }
 
   static getLogRequestParamsForCalories (calories, foodName = moment()

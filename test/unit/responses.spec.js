@@ -54,4 +54,13 @@ describe('Responses', () => {
       expect(result).to.be.a('string')
     })
   })
+
+  describe('getPossibleCommands', () => {
+    it('correctly lists commands', () => {
+      const _ = ResponseProcessor.getPossibleCommands
+      const result = _()
+      console.log(result)
+      expect(result).to.be.a('string')
+    })
+  })
 })
