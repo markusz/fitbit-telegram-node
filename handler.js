@@ -148,5 +148,4 @@ exports.TelegramMessageHandler = async function (event, context) {
     console.error(e)
     return MESSAGE_RETRIEVAL_CONFIRMATION
   }
-
 }
