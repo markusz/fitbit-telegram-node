@@ -164,6 +164,35 @@ const Responses = [
     )
   },
   {
+    meta: [/^q$/i, Actions.LOG_FOOD, 'Quark mager=500g with müsli=25g'],
+    getLogSpecifics: matchResult => (
+      [
+        [500, FitBitFoodIds.Quark.FETT_MAGER],
+        [25, FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+  },
+  {
+    meta: [/^q20$/i, Actions.LOG_FOOD, 'Quark mager=500g, 20%=250g with müsli=25g'],
+    getLogSpecifics: matchResult => (
+      [
+        [500, FitBitFoodIds.Quark.FETT_MAGER],
+        [250, FitBitFoodIds.Quark.FETT_20],
+        [25, FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+  },
+  {
+    meta: [/^q40$/i, Actions.LOG_FOOD, 'Quark mager=500g, 40%=250g with müsli=25g'],
+    getLogSpecifics: matchResult => (
+      [
+        [500, FitBitFoodIds.Quark.FETT_MAGER],
+        [250, FitBitFoodIds.Quark.FETT_40],
+        [25, FitBitFoodIds.Muesli.DEFAULT]
+      ]
+    )
+  },
+  {
     meta: [/^q20 (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark (mager=$1 20=$2) with müsli=$3'],
     getLogSpecifics: matchResult => (
       [
