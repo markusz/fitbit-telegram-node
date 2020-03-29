@@ -24,7 +24,7 @@ class ResponseProcessor {
     const before = moment(timeA, timePattern).tz('Europe/Berlin')
     const after = moment(timeB, timePattern).tz('Europe/Berlin')
     const isBetween = time.isBetween(before, after, null, inclusivity)
-    console.log(time.format(), before.format(), after.format(), isBetween)
+    // console.log(time.format(), before.format(), after.format(), isBetween)
     return isBetween
   }
 
