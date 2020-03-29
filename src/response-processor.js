@@ -142,7 +142,7 @@ class ResponseProcessor {
 
   static getPossibleCommands () {
     const messageParts = Responses.map(res => `${res.meta[0].toString()}`)
-    return '```\n'+messageParts.join('\n')+'\n```'
+    return '```\n' + messageParts.join('\n') + '\n```'
   }
 
   static getLogRequestParamsForCalories (calories, foodName = moment.tz('Europe/Berlin')
