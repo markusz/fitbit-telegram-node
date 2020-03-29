@@ -137,7 +137,6 @@ class ResponseProcessor {
     stringElements.push('```')
 
     const logString = stringElements.join('\n')
-    console.log(logString)
     return logString
   }
 

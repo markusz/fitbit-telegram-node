@@ -24,8 +24,7 @@ class TelegramApiClient {
     if (formatted) {
       params.parse_mode = 'MarkdownV2'
     }
-    return superagent.get(`${this.baseURL}/sendMessage`)
-      .query(params)
+    return superagent.get(`${this.baseURL}/sendMessage`).query(params)
   }
 
   static getQueryParamsForFoodLog (message) {
