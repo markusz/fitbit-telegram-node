@@ -100,7 +100,7 @@ exports.TelegramMessageHandler = async function (event, context) {
   const telegramMessage = TelegramMessage.getInstance(message)
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId())
 
-  console.log(`accessToken=${accessToken}`)
+  // console.log(`accessToken=${accessToken}`)
   console.log(`chatId=${telegramMessage.getChatId()}`)
   console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
@@ -132,7 +132,6 @@ exports.TelegramMessageHandler = async function (event, context) {
         console.log('command=get-log')
         const foodLog = await fitBitApiClient.getFoodLog()
         const logsBody = JSON.stringify(foodLog.body)
-        console.log(logsBody)
         const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
         TelegramApiClient.logTelegramAPIReply(telegramAPIReply)
         return MESSAGE_RETRIEVAL_CONFIRMATION
