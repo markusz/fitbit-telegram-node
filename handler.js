@@ -108,8 +108,7 @@ exports.TelegramMessageHandler = async function (event, context) {
     const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
     if (queryParams) {
       console.log('command=log-food')
-      const logResult = await fitBitApiClient.logFood(queryParams)
-      console.log(`log-result=${JSON.stringify(logResult)}`)
+      await fitBitApiClient.logFood(queryParams)
       const logs = await fitBitApiClient.getFoodLog()
       const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
       TelegramApiClient.logTelegramAPIReply(telegramAPIReply)

@@ -15,7 +15,7 @@ class TelegramApiClient {
   }
 
   static logTelegramAPIReply (superagentRes) {
-    console.log(`status=${superagentRes.status}, result=${superagentRes.body.result}`)
+    console.log(`status=${superagentRes.status}, messageId=${superagentRes.body.result.message_id}`)
   }
 
   replyInTelegramChat (message, formatted = true) {
