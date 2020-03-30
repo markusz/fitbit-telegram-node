@@ -96,7 +96,7 @@ exports.TelegramMessageHandler = async function (event, context) {
   const telegramMessage = TelegramMessage.getInstance(message)
 
   console.log(`chatId=${telegramMessage.getChatId()}`)
-  console.log(`messageId=${telegramMessage.getMessageId()}}`)
+  console.log(`messageId=${telegramMessage.getMessageId()}`)
   console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
 
   const dynamoDBItem = await getAccessTokenForChatId(telegramMessage.getChatId())
