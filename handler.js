@@ -92,20 +92,24 @@ exports.TelegramMessageHandler = async function (event, context) {
     return MESSAGE_RETRIEVAL_CONFIRMATION
   }
 
-  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID)
-  const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
-  const userId = lodash.get(dynamoDBItem, 'Item.userId.S')
-  const fitBitApiClient = new FitBitApiClient(accessToken)
-
   const message = lodash.get(JSON.parse(event.body), 'message')
   const telegramMessage = TelegramMessage.getInstance(message)
-  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId())
 
-  console.log(`userId=${userId}`)
-  console.log(`accessToken=${accessToken}`)
   console.log(`chatId=${telegramMessage.getChatId()}`)
   console.log(`messageId=${telegramMessage.getMessageId()}}`)
   console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`)
+
+  const dynamoDBItem = await getAccessTokenForChatId(telegramMessage.getChatId())
+  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, telegramMessage.getChatId())
+
+  const userId = lodash.get(dynamoDBItem, 'Item.userId.S')
+  const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
+
+  console.log(`userId=${userId}`)
+  console.log(`accessToken=${accessToken}`)
+
+  const fitBitApiClient = new FitBitApiClient(accessToken)
+
 
   try {
     const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
