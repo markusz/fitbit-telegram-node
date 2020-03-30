@@ -110,7 +110,6 @@ exports.TelegramMessageHandler = async function (event, context) {
 
   const fitBitApiClient = new FitBitApiClient(accessToken)
 
-
   try {
     const queryParams = TelegramApiClient.getQueryParamsForFoodLog(telegramMessage.getLowerCaseTextMessage())
     if (queryParams) {
