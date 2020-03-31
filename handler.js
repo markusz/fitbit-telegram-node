@@ -61,8 +61,10 @@ exports.FitbitOAuthResponseHandler = async function (event, context) {
     console.log(request)
     return {
       statusCode: 200,
-      headers: CORS_HEADERS,
-      body: JSON.stringify({ status: 'Success' })
+      headers: {
+        'cache-control-header1': 1000,
+        'cache-control-header2': 1000
+      }
     }
   } catch (e) {
     return {

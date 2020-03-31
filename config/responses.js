@@ -34,6 +34,20 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Kaese.KAESE]
   },
   {
+    meta: [/^risotto (\d+)$/i, Actions.LOG_CALORIES, 'Selbstgemachtes Meeresfrüchterisotto mit 111kcal / 100g'],
+    getLogSpecifics: matchResult => [
+      Number.parseInt(matchResult[1], 10) / 100 * 111,
+      `${matchResult[1]}g  Risotto á 111kcal/100g`
+    ]
+  },
+  {
+    meta: [/^brokkoligratin (\d+)$/i, Actions.LOG_CALORIES, 'Maggi Brokkoligratin (150g Käse, 2x Maggi, 1kg Brokkoli) mit 93kcal / 100g'],
+    getLogSpecifics: matchResult => [
+      Number.parseInt(matchResult[1], 10) / 100 * 93,
+      `${matchResult[1]}g  Brokkoligratin á 93kcal/100g`
+    ]
+  },
+  {
     meta: [/^kartoffeln (\d+)$/i, Actions.LOG_FOOD, 'Kartoffeln gekocht'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Vegetables.KARTOFFELN_GEKOCHT, FitBitUnitIds.GRAMM]
   },
@@ -66,7 +80,7 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Fruit.BIRNE, FitBitUnitIds.BIRNE_GANZ]
   },
   {
-    meta: [/^buttertoast$/i, Actions.LOG_FOOD, 'Buttertoast'],
+    meta: [/^buttertoast$/i, Actions.LOG_FOOD, 'Buttertoast (1 Toast, 15g Butter'],
     getLogSpecifics: () => (
       [
         [1, FitBitFoodIds.Backwaren.TOAST, FitBitUnitIds.UNIT],
@@ -75,7 +89,7 @@ const Responses = [
     )
   },
   {
-    meta: [/^butterbrot m$/i, Actions.LOG_FOOD, 'Butterbrot Mittel'],
+    meta: [/^butterbrot m$/i, Actions.LOG_FOOD, 'Butterbrot Mittel (35g Brot, 15g Butter)'],
     getLogSpecifics: () => (
       [
         [35, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM],
@@ -84,11 +98,19 @@ const Responses = [
     )
   },
   {
-    meta: [/^butterbrot l$/i, Actions.LOG_FOOD, 'Butterbrot Groß'],
+    meta: [/^butterbrot l$/i, Actions.LOG_FOOD, 'Butterbrot Groß (50g Brot, 25g Butter)'],
     getLogSpecifics: () => (
       [
         [50, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM],
         [25, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
+      ]
+    )
+  },
+  {
+    meta: [/^laugengebäck (\d+)$/i, Actions.LOG_FOOD, 'Laugengebäck mit 298kcal/100g'],
+    getLogSpecifics: matchResult => (
+      [
+        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Backwaren.LAUGENGEBAECK, FitBitUnitIds.GRAMM]
       ]
     )
   },
@@ -101,7 +123,7 @@ const Responses = [
     )
   },
   {
-    meta: [/^brot m$/i, Actions.LOG_FOOD, 'Scheibe Brot Mittel'],
+    meta: [/^brot m$/i, Actions.LOG_FOOD, 'Scheibe Brot Mittel (35g)'],
     getLogSpecifics: () => (
       [
         [35, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
@@ -109,7 +131,7 @@ const Responses = [
     )
   },
   {
-    meta: [/^brot l$/i, Actions.LOG_FOOD, 'Scheibe Brot Large'],
+    meta: [/^brot l$/i, Actions.LOG_FOOD, 'Scheibe Brot Large (50g)'],
     getLogSpecifics: () => (
       [
         [50, FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
