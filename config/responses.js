@@ -36,14 +36,14 @@ const Responses = [
   {
     meta: [/^risotto (\d+)$/i, Actions.LOG_CALORIES, 'Selbstgemachtes Meeresfrüchterisotto mit 111kcal / 100g'],
     getLogSpecifics: matchResult => [
-      Number.parseInt(matchResult[1], 10) / 100 * 111,
+      Math.round(Number.parseInt(matchResult[1], 10) / 100 * 111),
       `${matchResult[1]}g  Risotto á 111kcal/100g`
     ]
   },
   {
     meta: [/^brokkoligratin (\d+)$/i, Actions.LOG_CALORIES, 'Maggi Brokkoligratin (150g Käse, 2x Maggi, 1kg Brokkoli) mit 93kcal / 100g'],
     getLogSpecifics: matchResult => [
-      Number.parseInt(matchResult[1], 10) / 100 * 93,
+      Math.round(Number.parseInt(matchResult[1], 10) / 100 * 93),
       `${matchResult[1]}g  Brokkoligratin á 93kcal/100g`
     ]
   },
