@@ -97,22 +97,19 @@ exports.SurplusTransferer = async function (event, context) {
   const fitBitApiClient = new FitBitApiClient(accessToken)
 
   const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD')
-  console.log(yesterdayString)
   const foodLogY = (await fitBitApiClient.getFoodLog(yesterdayString)).body
-  console.log(foodLogY)
 
   const goalY = foodLogY.goals.calories
   const loggedY = foodLogY.summary.calories
   const surplusY = loggedY - goalY
-  console.log(surplusY)
 
-  // <0 means in budget and no carry over, >1000 probably indicates something out of the regulary or forgot to log -> better handle this manually
+  // <0 means in budget and no carry over required, >1000 indicates something irregular or forgot to log -> better handle this manually
   if (surplusY > 0 && surplusY <= 1000) {
     const queryParams = ResponseProcessor.getLogRequestParamsForCalories(surplusY, `∆ ${yesterdayString}`)
     await fitBitApiClient.logFood(queryParams)
     const logs = await fitBitApiClient.getFoodLog()
     await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
-    await telegramApiClient.replyInTelegramChat(`Yesterday's budget exceeded by ${surplusY}. Time to pay.`)
+    await telegramApiClient.replyInTelegramChat(TelegramMessage.wrapStringInCodeBlock(`Yesterday's budget exceeded by ${surplusY}. Time to pay.`))
   }
 
   return MESSAGE_RETRIEVAL_CONFIRMATION

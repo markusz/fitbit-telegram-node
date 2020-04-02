@@ -9,6 +9,10 @@ class TelegramMessage {
     return new TelegramMessage(message)
   }
 
+  static wrapStringInCodeBlock (str) {
+    return '```\n' + str + '\n```'
+  }
+
   getSenderName () {
     return this.message.from.first_name
   }
