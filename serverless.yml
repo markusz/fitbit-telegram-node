@@ -51,6 +51,10 @@ functions:
       - schedule: cron(55 8 * * ? *)
       - schedule: cron(55 15 * * ? *)
       - schedule: cron(55 19 * * ? *)
+  transferYesterdaySurplusToToday:
+    handler: handler.SurplusTransferer
+    events:
+      - schedule: cron(0 3 * * ? *)
   receiveOAuthAccessToken:
       handler: handler.FitbitOAuthResponseHandler
       events:

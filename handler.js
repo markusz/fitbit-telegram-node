@@ -4,6 +4,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies,import/no-unresolved
 const AWS = require('aws-sdk')
 const lodash = require('lodash')
+const moment = require('moment-timezone')
 
 const { TelegramMessage } = require('./src/telegram-message')
 const { TelegramApiClient } = require('./src/telegram-api-client')
@@ -83,7 +84,35 @@ exports.TelegramMealReminder = async function (event, context) {
 
   const foodLog = await new FitBitApiClient(accessToken).getFoodLog()
   const telegramAPIReply = await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body))
+
   console.log(`telegram-resp=${JSON.stringify(telegramAPIReply)}`)
+  return MESSAGE_RETRIEVAL_CONFIRMATION
+}
+
+exports.SurplusTransferer = async function (event, context) {
+  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN, process.env.TELEGRAM_CHAT_ID)
+  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID)
+
+  const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
+  const fitBitApiClient = new FitBitApiClient(accessToken)
+
+  const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD')
+  const foodLogY = await fitBitApiClient.getFoodLog(yesterdayString)
+
+  const goalY = foodLogY.goals.calories
+  const loggedY = foodLogY.summary.calories
+  const surplusY = loggedY - goalY
+
+  // <0 means in budget and no carry over, >1000 probably indicates something out of the regulary or forgot to log -> better handle this manually
+  if (surplusY > 0 && surplusY <= 1000) {
+    const queryParams = ResponseProcessor.getLogRequestParamsForCalories(surplusY, `∆ ${yesterdayString}`)
+    await fitBitApiClient.logFood(queryParams)
+    const logs = await fitBitApiClient.getFoodLog()
+    await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
+    await telegramApiClient.replyInTelegramChat(`Yesterday's budget exceeded by ${surplusY}. Time to pay.`)
+  }
+
+  return MESSAGE_RETRIEVAL_CONFIRMATION
 }
 
 exports.TelegramMessageHandler = async function (event, context) {
