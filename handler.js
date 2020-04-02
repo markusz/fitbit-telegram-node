@@ -97,11 +97,14 @@ exports.SurplusTransferer = async function (event, context) {
   const fitBitApiClient = new FitBitApiClient(accessToken)
 
   const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD')
+  console.log(yesterdayString)
   const foodLogY = await fitBitApiClient.getFoodLog(yesterdayString)
+  console.log(foodLogY)
 
   const goalY = foodLogY.goals.calories
   const loggedY = foodLogY.summary.calories
   const surplusY = loggedY - goalY
+  console.log(surplusY)
 
   // <0 means in budget and no carry over, >1000 probably indicates something out of the regulary or forgot to log -> better handle this manually
   if (surplusY > 0 && surplusY <= 1000) {
