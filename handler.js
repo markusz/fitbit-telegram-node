@@ -98,7 +98,7 @@ exports.SurplusTransferer = async function (event, context) {
 
   const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD')
   console.log(yesterdayString)
-  const foodLogY = await fitBitApiClient.getFoodLog(yesterdayString)
+  const foodLogY = (await fitBitApiClient.getFoodLog(yesterdayString)).body
   console.log(foodLogY)
 
   const goalY = foodLogY.goals.calories
