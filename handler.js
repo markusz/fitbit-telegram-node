@@ -103,8 +103,14 @@ exports.SurplusTransferer = async function (event, context) {
   const foodLogY = (await fitBitApiClient.getFoodLog(yesterdayString)).body
   console.log(foodLogY)
 
-  const goalY = foodLogY.goals.calories
   const loggedY = foodLogY.summary.calories
+  const goalFromFoodLog = lodash.get(foodLogY, 'goals.calories', -1) > 0
+  if (goalFromFoodLog < 0) {
+    console.log(`Calorie goal is missing in foodLog for ${yesterdayString}, querying goal API directly`)
+  }
+
+  const goalY = goalFromFoodLog > 0 ? goalFromFoodLog : (await fitBitApiClient.getGoals()).body.goals.calories
+  console.log(`goalY=${goalY}`)
   const surplusY = loggedY - goalY
   console.log(`delta=${surplusY}`)
 

@@ -21,6 +21,12 @@ class FitBitApiClient {
       .set(this.generateAuthHeader())
   }
 
+  getGoals () {
+    return superagent
+      .get('https://api.fitbit.com/1/user/-/foods/log/goal.jsonn')
+      .set(this.generateAuthHeader())
+  }
+
   getFoodLog (dateString = moment().tz('Europe/Berlin').format('YYYY-MM-DD')) {
     return superagent
       .get(`https://api.fitbit.com/1/user/-/foods/log/date/${dateString}.json`)
