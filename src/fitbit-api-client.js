@@ -23,7 +23,7 @@ class FitBitApiClient {
 
   getGoals () {
     return superagent
-      .get('https://api.fitbit.com/1/user/-/foods/log/goal.jsonn')
+      .get('https://api.fitbit.com/1/user/-/foods/log/goal.json')
       .set(this.generateAuthHeader())
   }
 
