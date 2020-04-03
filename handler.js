@@ -96,12 +96,17 @@ exports.SurplusTransferer = async function (event, context) {
   const accessToken = lodash.get(dynamoDBItem, 'Item.accessToken.S')
   const fitBitApiClient = new FitBitApiClient(accessToken)
 
+  console.log(`accessToken=${accessToken}`)
+
   const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD')
+  console.log(`dayString=${yesterdayString}`)
   const foodLogY = (await fitBitApiClient.getFoodLog(yesterdayString)).body
+  console.log(foodLogY)
 
   const goalY = foodLogY.goals.calories
   const loggedY = foodLogY.summary.calories
   const surplusY = loggedY - goalY
+  console.log(`delta=${surplusY}`)
 
   // <0 means in budget and no carry over required, >1000 indicates something irregular or forgot to log -> better handle this manually
   if (surplusY > 0 && surplusY <= 1000) {
