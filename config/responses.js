@@ -310,7 +310,7 @@ const Responses = [
   },
   {
     meta: [/^(kaffee|k)$/i, Actions.LOG_FOOD, 'Kaffee'],
-    getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.TASSE_180_ML]
+    getLogSpecifics: () => [1, FitBitFoodIds.Drinks.COFFEE, FitBitUnitIds.UNIT]
   },
   {
     meta: [/^(weissbier|wb)$/i, Actions.LOG_FOOD, 'Weißbier'],
