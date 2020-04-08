@@ -104,7 +104,7 @@ exports.SurplusTransferer = async function (event, context) {
   console.log(foodLogY)
 
   const loggedY = foodLogY.summary.calories
-  const goalFromFoodLog = lodash.get(foodLogY, 'goals.calories', -1) > 0
+  const goalFromFoodLog = lodash.get(foodLogY, 'goals.calories', -1)
   if (goalFromFoodLog < 0) {
     console.log(`Calorie goal is missing in foodLog for ${yesterdayString}, querying goal API directly`)
   }
