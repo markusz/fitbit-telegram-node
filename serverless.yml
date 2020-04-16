@@ -49,7 +49,6 @@ functions:
     events:
       - schedule: cron(55 9 * * ? *)
       - schedule: cron(55 16 * * ? *)
-      - schedule: cron(55 20 * * ? *)
   transferYesterdaySurplusToToday:
     handler: handler.SurplusTransferer
     events:

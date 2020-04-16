@@ -120,7 +120,6 @@ exports.SurplusTransferer = async function (event, context) {
     await fitBitApiClient.logFood(queryParams)
     const logs = await fitBitApiClient.getFoodLog()
     await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body))
-    await telegramApiClient.replyInTelegramChat(TelegramMessage.wrapStringInCodeBlock(`Yesterday's budget exceeded by ${surplusY}. Time to pay.`))
   }
 
   return MESSAGE_RETRIEVAL_CONFIRMATION
