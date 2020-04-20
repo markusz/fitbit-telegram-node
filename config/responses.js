@@ -34,6 +34,10 @@ const Responses = [
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Kaese.KAESE]
   },
   {
+    meta: [/^reis (\d+)$/i, Actions.LOG_FOOD, 'Gekochter Reis'],
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.REIS, FitBitUnitIds.GRAMM]
+  },
+  {
     meta: [/^risotto (\d+)$/i, Actions.LOG_CALORIES, 'Selbstgemachtes Meeresfrüchterisotto mit 111kcal / 100g'],
     getLogSpecifics: matchResult => [
       Math.round(Number.parseInt(matchResult[1], 10) / 100 * 111),
@@ -53,7 +57,7 @@ const Responses = [
   },
   {
     meta: [/^nudeln (\d+)$/i, Actions.LOG_FOOD, 'Nudeln gekocht'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Vegetables.KARTOFFELN_GEKOCHT, FitBitUnitIds.GRAMM]
+    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.NUDELN, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^schinken (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Schinken mit etwa 20g'],

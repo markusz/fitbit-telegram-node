@@ -85,6 +85,7 @@ const FitBitFoodIds = {
   },
   BUTTER: 537133257,
   NUDELN: 537155075,
+  REIS: 537246167,
   Restaurants: {
     Subway: {
       CHICKEN_TERIYAKI: 537191019,
