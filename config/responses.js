@@ -305,11 +305,11 @@ const Responses = [
     getLogSpecifics: () => [1, FitBitFoodIds.Backwaren.SEMMEL, FitBitUnitIds.GROSS_1]
   },
   {
-    meta: [/^kräuterbaguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Kräuterbaguette'],
+    meta: [/^kräuterbaguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Kräuterbaguette (22G)'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Backwaren.KRAEUTERBAGUETTE]
   },
   {
-    meta: [/^baguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Baguette'],
+    meta: [/^baguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Baguette (20g)'],
     getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 20, FitBitFoodIds.Backwaren.BAGUETTE]
   },
   {
