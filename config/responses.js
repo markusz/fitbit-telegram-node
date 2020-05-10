@@ -9,21 +9,27 @@ const Actions = {
   BUDGET: 2
 }
 
+const number = Math.round(numberAsStringToInt(matchResult[1]))
+
+function numberAsStringToInt (numberAsString, multiplyWith = 1) {
+  return Math.round(Number.parseInt(numberAsString, 10) * multiplyWith)
+}
+
 const Responses = [
   {
     meta: [/^(\d+) ([\u00C0-\u017Fa-zA-Z ]+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), startCase(matchResult[2])]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), startCase(matchResult[2])]
   },
   {
     meta: [/^(\d+) (\d+) ([\u00C0-\u017Fa-zA-Z ]+)$/i, Actions.LOG_CALORIES, '$1 gramm of a food with $2 calories/100g'],
     getLogSpecifics: matchResult => [
-      Math.round(Number.parseInt(matchResult[1], 10) / 100 * Number.parseInt(matchResult[2], 10)),
+      Math.round(numberAsStringToInt(matchResult[1]) / 100 * numberAsStringToInt(matchResult[2])),
       `${matchResult[1]}g ${startCase(matchResult[3])} á ${matchResult[2]}kcal/100g`
     ]
   },
   {
     meta: [/^(\d+)$/i, Actions.LOG_CALORIES, 'Calories'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10)]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1])]
   },
   {
     meta: [/^dd c$/i, Actions.LOG_CALORIES, 'Classic Ceasars Salad from Dean and David'],
@@ -31,57 +37,61 @@ const Responses = [
   },
   {
     meta: [/^käse (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Bergbauernkäse mit etwa 22g'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Kaese.KAESE]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 22), FitBitFoodIds.Kaese.KAESE]
   },
   {
     meta: [/^reis (\d+)$/i, Actions.LOG_FOOD, 'Gekochter Reis'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.REIS, FitBitUnitIds.GRAMM]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), FitBitFoodIds.REIS, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^risotto (\d+)$/i, Actions.LOG_CALORIES, 'Selbstgemachtes Meeresfrüchterisotto mit 111kcal / 100g'],
     getLogSpecifics: matchResult => [
-      Math.round(Number.parseInt(matchResult[1], 10) / 100 * 111),
+      Math.round(numberAsStringToInt(matchResult[1]) / 100 * 111),
       `${matchResult[1]}g  Risotto á 111kcal/100g`
     ]
   },
   {
     meta: [/^brokkoligratin (\d+)$/i, Actions.LOG_CALORIES, 'Maggi Brokkoligratin (150g Käse, 2x Maggi, 1kg Brokkoli) mit 93kcal / 100g'],
     getLogSpecifics: matchResult => [
-      Math.round(Number.parseInt(matchResult[1], 10) / 100 * 93),
+      Math.round(numberAsStringToInt(matchResult[1]) / 100 * 93),
       `${matchResult[1]}g  Brokkoligratin á 93kcal/100g`
     ]
   },
   {
     meta: [/^kartoffeln (\d+)$/i, Actions.LOG_FOOD, 'Kartoffeln gekocht'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Vegetables.KARTOFFELN_GEKOCHT, FitBitUnitIds.GRAMM]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Vegetables.KARTOFFELN_GEKOCHT, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^nudeln (\d+)$/i, Actions.LOG_FOOD, 'Nudeln gekocht'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10), FitBitFoodIds.NUDELN, FitBitUnitIds.GRAMM]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), FitBitFoodIds.NUDELN, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^schinken (\d+)$/i, Actions.LOG_FOOD, 'Eine Scheibe Schinken mit etwa 20g'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 20, FitBitFoodIds.Wurst.SCHINKEN]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 20), FitBitFoodIds.Wurst.SCHINKEN]
   },
   {
     meta: [/^salami s (\d+)$/i, Actions.LOG_FOOD, 'Kleine Salamischeibe mit etwa 4g (fein geschnitten, 4-5 cm im Durchmesser)'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 4, FitBitFoodIds.Wurst.SALAMI]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 4), FitBitFoodIds.Wurst.SALAMI]
   },
   {
     meta: [/^salami m (\d+)$/i, Actions.LOG_FOOD, 'Mittlere Salamischeibe mit etwa 8g (etwas dicker geschnitten / größerer Durchmesser)'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 8, FitBitFoodIds.Wurst.SALAMI]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 8), FitBitFoodIds.Wurst.SALAMI]
   },
   {
     meta: [/^salami l (\d+)$/i, Actions.LOG_FOOD, 'Große Salamischeibe mit etwa 12g (dick geschnitten, >8cm Durchmesser'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 12, FitBitFoodIds.Wurst.SALAMI]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 12), FitBitFoodIds.Wurst.SALAMI]
   },
   {
     meta: [/^traube (\d+)$/i, Actions.LOG_FOOD, 'Trauben'],
-    getLogSpecifics: matchResult => [Math.round(Number.parseInt(matchResult[1], 10) * 4.3), FitBitFoodIds.Fruit.GRAPE]
+    getLogSpecifics: matchResult => [Math.round(numberAsStringToInt(matchResult[1]), 4.3), FitBitFoodIds.Fruit.GRAPE]
   },
   {
     meta: [/^birne$/i, Actions.LOG_FOOD, 'Birne'],
     getLogSpecifics: () => [1, FitBitFoodIds.Fruit.BIRNE, FitBitUnitIds.BIRNE_GANZ]
+  },
+  {
+    meta: [/^butter (\d+)$/i, Actions.LOG_FOOD, 'Butter'],
+    getLogSpecifics: () => [number, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^buttertoast$/i, Actions.LOG_FOOD, 'Buttertoast (1 Toast, 15g Butter'],
@@ -114,7 +124,7 @@ const Responses = [
     meta: [/^laugengebäck (\d+)$/i, Actions.LOG_FOOD, 'Laugengebäck mit 298kcal/100g'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Backwaren.LAUGENGEBAECK, FitBitUnitIds.GRAMM]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Backwaren.LAUGENGEBAECK, FitBitUnitIds.GRAMM]
       ]
     )
   },
@@ -122,7 +132,7 @@ const Responses = [
     meta: [/^brot (\d+)$/i, Actions.LOG_FOOD, 'Brot. Zur Abschätzung: 1cm dick & Handflächengroß = 45g, jedes Fingerglied mehr/weniger entspricht etwa 5g+-'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Backwaren.BROT, FitBitUnitIds.GRAMM]
       ]
     )
   },
@@ -155,8 +165,8 @@ const Responses = [
     meta: [/^müsli (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Müsli with weights'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Muesli.KLASSIK, FitBitUnitIds.GRAMM],
+        [numberAsStringToInt(matchResult[2]), FitBitFoodIds.Drinks.MILCH, FitBitUnitIds.ML]
       ]
     )
   },
@@ -174,9 +184,9 @@ const Responses = [
     meta: [/^joghurt (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Joghurt with weights'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Joghurt.Plain.DEFAULT],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Joghurt.Fruit.DEFAULT],
-        [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Joghurt.Plain.DEFAULT],
+        [numberAsStringToInt(matchResult[2]), FitBitFoodIds.Joghurt.Fruit.DEFAULT],
+        [numberAsStringToInt(matchResult[3]), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
   },
@@ -184,8 +194,8 @@ const Responses = [
     meta: [/^q (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark mager=$1 with müsli=$2'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Muesli.DEFAULT]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Quark.FETT_MAGER],
+        [numberAsStringToInt(matchResult[2]), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
   },
@@ -222,9 +232,9 @@ const Responses = [
     meta: [/^q20 (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark (mager=$1 20=$2) with müsli=$3'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_20],
-        [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Quark.FETT_MAGER],
+        [numberAsStringToInt(matchResult[2]), FitBitFoodIds.Quark.FETT_20],
+        [numberAsStringToInt(matchResult[3]), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
   },
@@ -232,9 +242,9 @@ const Responses = [
     meta: [/^q40 (\d+) (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark (mager=$1 40=$2) with müsli=$3'],
     getLogSpecifics: matchResult => (
       [
-        [Number.parseInt(matchResult[1], 10), FitBitFoodIds.Quark.FETT_MAGER],
-        [Number.parseInt(matchResult[2], 10), FitBitFoodIds.Quark.FETT_40],
-        [Number.parseInt(matchResult[3], 10), FitBitFoodIds.Muesli.DEFAULT]
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Quark.FETT_MAGER],
+        [numberAsStringToInt(matchResult[2]), FitBitFoodIds.Quark.FETT_40],
+        [numberAsStringToInt(matchResult[3]), FitBitFoodIds.Muesli.DEFAULT]
       ]
     )
   },
@@ -306,11 +316,11 @@ const Responses = [
   },
   {
     meta: [/^kräuterbaguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Kräuterbaguette (22G)'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 22, FitBitFoodIds.Backwaren.KRAEUTERBAGUETTE]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 22), FitBitFoodIds.Backwaren.KRAEUTERBAGUETTE]
   },
   {
     meta: [/^baguette (\d+)$/i, Actions.LOG_FOOD, 'Scheibe Baguette (20g)'],
-    getLogSpecifics: matchResult => [Number.parseInt(matchResult[1], 10) * 20, FitBitFoodIds.Backwaren.BAGUETTE]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), 20, FitBitFoodIds.Backwaren.BAGUETTE]
   },
   {
     meta: [/^(kaffee|k)$/i, Actions.LOG_FOOD, 'Kaffee'],
