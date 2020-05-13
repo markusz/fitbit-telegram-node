@@ -9,8 +9,6 @@ const Actions = {
   BUDGET: 2
 }
 
-const number = Math.round(numberAsStringToInt(matchResult[1]))
-
 function numberAsStringToInt (numberAsString, multiplyWith = 1) {
   return Math.round(Number.parseInt(numberAsString, 10) * multiplyWith)
 }
@@ -83,7 +81,7 @@ const Responses = [
   },
   {
     meta: [/^traube (\d+)$/i, Actions.LOG_FOOD, 'Trauben'],
-    getLogSpecifics: matchResult => [Math.round(numberAsStringToInt(matchResult[1]), 4.3), FitBitFoodIds.Fruit.GRAPE]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1], 4.3), FitBitFoodIds.Fruit.GRAPE]
   },
   {
     meta: [/^birne$/i, Actions.LOG_FOOD, 'Birne'],
@@ -91,7 +89,7 @@ const Responses = [
   },
   {
     meta: [/^butter (\d+)$/i, Actions.LOG_FOOD, 'Butter'],
-    getLogSpecifics: () => [number, FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]), FitBitFoodIds.BUTTER, FitBitUnitIds.GRAMM]
   },
   {
     meta: [/^buttertoast$/i, Actions.LOG_FOOD, 'Buttertoast (1 Toast, 15g Butter'],
