@@ -30,6 +30,10 @@ const Responses = [
     getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1])]
   },
   {
+    meta: [/^p (\d+)$/i, Actions.LOG_CALORIES, 'Classic Ceasars Salad from Dean and David'],
+    getLogSpecifics: matchResult => [numberAsStringToInt(matchResult[1]) * 25, `${numberAsStringToInt(matchResult[1])} x Plätzchen`]
+  },
+  {
     meta: [/^dd c$/i, Actions.LOG_CALORIES, 'Classic Ceasars Salad from Dean and David'],
     getLogSpecifics: matchResult => [367 + 247 + 122, 'Classic Ceasars Salad (Dean & David)']
   },

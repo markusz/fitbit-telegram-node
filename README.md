@@ -10,7 +10,7 @@ You can use my existing Bot or use the code in this repository to create your ow
 
 The Bot uses a .js file to map telegram messages to foodlogs.
 
-If has a basic config in German for my own use. If you want to extend it you can submit a Pull Request or fork the project and create your own backend incl. configuration
+It has a basic config in German for my own use. If you want to extend it you can submit a Pull Request or fork the project and create your own backend incl. configuration
 
 There are 2 types of matching the bot can do
 
