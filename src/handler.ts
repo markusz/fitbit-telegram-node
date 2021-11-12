@@ -47,6 +47,7 @@ const getAccessTokenForChatId = (chatId: string) => dynamoDB.getItem({
 }).promise();
 
 const makeOAuthURLForInitMessage = (telegramMessage: TelegramMessage) => {
+  // https://stackoverflow.com/questions/60130062/escaped-character-on-telegram-bot-api-4-5-markdownv2-gives-trouble-for-hyper-lin
   const redirectURI = `https://${process.env.BASE_URL!}`;
   const scope = 'nutrition';
 
@@ -177,7 +178,7 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
       if (telegramMessage.getLowerCaseTextMessage() === 'init') {
         console.log('command=init-flow');
         const url = makeOAuthURLForInitMessage(telegramMessage);
-        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url);
+        const telegramAPIReply = await telegramApiClient.replyInTelegramChat(url, false);
         TelegramApiClient.logTelegramAPIReply(telegramAPIReply);
         return MESSAGE_RETRIEVAL_CONFIRMATION;
       }

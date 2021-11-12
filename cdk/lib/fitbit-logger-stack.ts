@@ -62,12 +62,12 @@ export default class FitbitLoggerStack extends cdk.Stack {
       target: RecordTarget.fromAlias(new ApiGatewayv2DomainProperties(domainName.regionalDomainName, domainName.regionalHostedZoneId)),
     });
 
-    const table = new Table(this, 'DynamoTable', {
-      tableName: 'FitbitSessions',
+    const table = new Table(this, 'Table', {
+      tableName: 'FitbitAuth',
       removalPolicy: RemovalPolicy.DESTROY,
       partitionKey: {
         name: 'chatId',
-        type: AttributeType.STRING,
+        type: AttributeType.NUMBER,
       },
     });
 
