@@ -79,6 +79,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
       SECURITY_TOKEN: secrets.secretValueFromJson('SECURITY_TOKEN').toString(),
       CLIENT_ID: secrets.secretValueFromJson('CLIENT_ID').toString(),
       DYNAMODB_TABLE: table.tableName,
+      BASE_URL: apiDomainName,
     };
 
     const apiGw = new HttpApi(this, 'HTTPAPI', {

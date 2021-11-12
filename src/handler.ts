@@ -47,14 +47,15 @@ const getAccessTokenForChatId = (chatId: string) => dynamoDB.getItem({
 }).promise();
 
 const makeOAuthURLForInitMessage = (telegramMessage: TelegramMessage) => {
-  const redirectURI = 'https://s3.eu-west-1.amazonaws.com/fitbit-telegram-bridge/index.html';
+  const redirectURI = `https://${process.env.BASE_URL!}`;
   const scope = 'nutrition';
 
-  return `https://www.fitbit.com/oauth2/authorize?response_type=token&expires_in=31536000&client_id=${process.env.CLIENT_ID}&redirect_uri=${redirectURI}&scope=${scope}&state=${telegramMessage.getChatId()}`;
+  return `https://www.fitbit.com/oauth2/authorize?response_type=token&expires_in=31536000&client_id=${process.env.CLIENT_ID!}&redirect_uri=${redirectURI}&scope=${scope}&state=${telegramMessage.getChatId()}`;
 };
 
 export async function StaticRedirectPage() {
-  const page = await readFile('./index.html');
+  const template = await readFile('./index.html');
+  const htmlPage = template.toString().replace('BASE_URL', process.env.BASE_URL!);
 
   return {
     statusCode: 200,
@@ -62,7 +63,7 @@ export async function StaticRedirectPage() {
       'Content-Type': 'text/html',
     },
 
-    body: page.toString(),
+    body: htmlPage,
   };
 }
 

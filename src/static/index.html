@@ -8,7 +8,7 @@
       window.onload = () => {
         const hash = window.location.hash || '#';
         const query = hash.substring(1);
-        const baseURL = 'https://ult4vrqyz3.execute-api.eu-west-1.amazonaws.com/test/auth/fitbit';
+        const baseURL = 'https://BASE_URL/auth/fitbit';
         const url = `${baseURL}?${query}`;
         $.get(url, (data) => {
           console.log(data);
