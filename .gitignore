@@ -2,6 +2,11 @@
 node_modules
 jspm_packages
 
+*.js
+!jest.config.js
+*.d.ts
+src/node_modules
+
 # Serverless directories
 .serverless
 /credentials
@@ -11,3 +16,5 @@ fitbit-telegram-node.iml
 /config.yml
 /.nyc_output/
 /coverage/
+/cdk/secrets.json
+cdk.out
