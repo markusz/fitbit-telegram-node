@@ -12,12 +12,13 @@ import { Rule, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Secret } from '@aws-cdk/aws-secretsmanager';
 
-interface FitbitLoggerStackProps extends StackProps {
+export interface FitbitLoggerStackProps extends StackProps {
   hostedZone: {
     id: string,
     name: string,
   },
-  secretsName: string
+  secretsName: string,
+  subdomain: string
 }
 
 export default class FitbitLoggerStack extends cdk.Stack {
@@ -43,7 +44,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
       hostedZoneId: props.hostedZone.id,
     });
 
-    const apiDomainName = `fitbit.${hostedZone.zoneName}`;
+    const apiDomainName = `${props.subdomain}.${hostedZone.zoneName}`;
 
     const apiCert = new DnsValidatedCertificate(this, 'ApiCertificate', {
       domainName: apiDomainName,
