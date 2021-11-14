@@ -35,6 +35,7 @@ class FitbitTelegramLoggerPipeline extends Stack {
         commands: [
           'npm run build',
           'npx cdk synth',
+          'npx cdk deploy FitbitTelegramLoggerPipeline --require-approval never',
         ],
       }),
     });
