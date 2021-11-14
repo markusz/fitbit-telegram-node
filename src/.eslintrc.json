@@ -15,6 +15,9 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "max-len": "off"
+        "max-len": "off",
+        "no-console": "off",
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }

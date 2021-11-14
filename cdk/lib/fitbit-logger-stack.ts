@@ -140,7 +140,6 @@ export default class FitbitLoggerStack extends cdk.Stack {
       environment: envVariables,
       bundling: {
         commandHooks: {
-          // Copy a file so that it will be included in the bundled asset
           afterBundling(inputDir: string, outputDir: string): string[] {
             return [`cp ${inputDir}/../src/static/index.html ${outputDir}`];
           },

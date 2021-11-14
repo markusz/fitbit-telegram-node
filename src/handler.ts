@@ -1,14 +1,10 @@
-/* eslint-disable eqeqeq */
-// eslint-disable-next-line import/no-extraneous-dependencies,import/no-unresolved
 import AWS from 'aws-sdk';
 
 import lodash from 'lodash';
 
 import moment from 'moment-timezone';
 
-// eslint-disable-next-line import/no-unresolved
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import TelegramMessage from './handler/telegram-message';
 import TelegramApiClient from './handler/telegram-api-client';
@@ -143,7 +139,7 @@ export async function SurplusTransferer() {
 export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
   // SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
   const token = lodash.get(event, 'pathParameters.token');
-  if (process.env.SECURITY_TOKEN != token) {
+  if (process.env.SECURITY_TOKEN !== token) {
     console.error(`Request declined. token=${token}`);
     return MESSAGE_RETRIEVAL_CONFIRMATION;
   }

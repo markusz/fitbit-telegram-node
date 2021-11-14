@@ -18,3 +18,5 @@ fitbit-telegram-node.iml
 /coverage/
 /cdk/secrets.json
 cdk.out
+/src/.nyc_output/
+/src/coverage/

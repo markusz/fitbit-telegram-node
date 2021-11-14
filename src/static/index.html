@@ -8,6 +8,7 @@
       window.onload = () => {
         const hash = window.location.hash || '#';
         const query = hash.substring(1);
+        // BASE_URL will be string replaced by Lambda with the value of the actual url
         const baseURL = 'https://BASE_URL/auth/fitbit';
         const url = `${baseURL}?${query}`;
         $.get(url, (data) => {
