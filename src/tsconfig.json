@@ -19,7 +19,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "mocha"]
+    "types": ["node", "mocha", "jest"]
   },
-  "exclude": ["cdk.out"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

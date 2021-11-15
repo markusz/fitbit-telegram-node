@@ -4,7 +4,9 @@ import * as cdk from '@aws-cdk/core';
 import {
   Construct, Stack, StackProps, Stage, StageProps,
 } from '@aws-cdk/core';
-import { CodePipeline, CodePipelineSource, ShellStep } from '@aws-cdk/pipelines';
+import {
+  CodePipeline, CodePipelineSource, ManualApprovalStep, ShellStep,
+} from '@aws-cdk/pipelines';
 import FitbitTelegramLoggerStack, { FitbitLoggerStackProps } from '../lib/fitbit-logger-stack';
 
 const app = new cdk.App();
@@ -17,7 +19,7 @@ class FitbitTelegramLoggerStage extends Stage {
   constructor(scope: Construct, id: string, props: FitbitTelegramLoggerStageProps) {
     super(scope, id, props);
 
-    new FitbitTelegramLoggerStack(app, 'FitbitTelegramLoggerStack', props);
+    new FitbitTelegramLoggerStack(this, 'FitbitTelegramLoggerStack', props);
   }
 }
 
@@ -26,6 +28,7 @@ class FitbitTelegramLoggerPipeline extends Stack {
     super(scope, id, props);
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
+      pipelineName: 'FitbitLoggerCICD',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('markusz/fitbit-telegram-node', 'master', {
           authentication: cdk.SecretValue.secretsManager('GithubPersonalToken', {
@@ -33,6 +36,9 @@ class FitbitTelegramLoggerPipeline extends Stack {
           }),
         }),
         commands: [
+          'cd cdk',
+          'npm i',
+          'npm i -g esbuild',
           'npm run build',
           'npx cdk synth',
           'npx cdk deploy FitbitTelegramLoggerPipeline --require-approval never',
@@ -68,7 +74,12 @@ class FitbitTelegramLoggerPipeline extends Stack {
   }
 }
 
-new FitbitTelegramLoggerPipeline(app, 'FitbitTelegramLoggerPipeline');
+new FitbitTelegramLoggerPipeline(app, 'FitbitTelegramLoggerPipeline', {
+  env: {
+    account: '321869685577',
+    region: 'eu-central-1',
+  },
+});
 
 new FitbitTelegramLoggerStack(app, 'FitbitTelegramLoggerStack', {
   hostedZone: {

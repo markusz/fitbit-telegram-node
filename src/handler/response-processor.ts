@@ -24,6 +24,7 @@ export default class ResponseProcessor {
   }
 
   static fromMessage(message: string) {
+    console.log(('hfjvjh'));
     return new ResponseProcessor(message);
   }
 
