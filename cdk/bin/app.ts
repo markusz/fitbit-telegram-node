@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
+
 import * as cdk from '@aws-cdk/core';
 import {
   Construct, Stack, StackProps, Stage, StageProps,
 } from '@aws-cdk/core';
-import {
-  CodePipeline, CodePipelineSource, ManualApprovalStep, ShellStep,
-} from '@aws-cdk/pipelines';
+import { CodePipeline, CodePipelineSource, ShellStep } from '@aws-cdk/pipelines';
 import FitbitTelegramLoggerStack, { FitbitLoggerStackProps } from '../lib/fitbit-logger-stack';
 
 const app = new cdk.App();
+const cdkVersion = require('../package.json').devDependencies['aws-cdk'];
 
 interface FitbitTelegramLoggerStageProps extends StageProps, FitbitLoggerStackProps {
 
@@ -28,6 +27,8 @@ class FitbitTelegramLoggerPipeline extends Stack {
     super(scope, id, props);
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
+      selfMutation: false,
+      cliVersion: cdkVersion,
       pipelineName: 'FitbitLoggerCICD',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('markusz/fitbit-telegram-node', 'master', {
@@ -35,18 +36,22 @@ class FitbitTelegramLoggerPipeline extends Stack {
             jsonField: 'oauthToken',
           }),
         }),
+        primaryOutputDirectory: './cdk/cdk.out',
         commands: [
-          'cd cdk',
+          'cd src',
+          'npm i',
+          'cd ../cdk',
           'npm i',
           'npm i -g esbuild',
           'npm run build',
           'npx cdk synth',
-          'npx cdk deploy FitbitTelegramLoggerPipeline --require-approval never',
         ],
       }),
     });
 
-    pipeline.addStage(new FitbitTelegramLoggerStage(this, 'EuWest1', {
+    const wave = pipeline.addWave('MultiRegionDeployment');
+
+    wave.addStage(new FitbitTelegramLoggerStage(this, 'EuWest1', {
       hostedZone: {
         id: 'Z003500238UAU9YFAGQ45',
         name: 'aws.markusziller.de',
@@ -59,7 +64,7 @@ class FitbitTelegramLoggerPipeline extends Stack {
       },
     }));
 
-    pipeline.addStage(new FitbitTelegramLoggerStage(this, 'UsEast1', {
+    wave.addStage(new FitbitTelegramLoggerStage(this, 'UsEast1', {
       hostedZone: {
         id: 'Z003500238UAU9YFAGQ45',
         name: 'aws.markusziller.de',
