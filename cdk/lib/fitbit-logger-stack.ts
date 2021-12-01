@@ -11,6 +11,7 @@ import { Runtime } from '@aws-cdk/aws-lambda';
 import { Rule, Schedule } from '@aws-cdk/aws-events';
 import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { Secret } from '@aws-cdk/aws-secretsmanager';
+import { Topic } from '@aws-cdk/aws-sns';
 
 export interface FitbitLoggerStackProps extends StackProps {
   hostedZone: {
@@ -42,6 +43,11 @@ export default class FitbitLoggerStack extends cdk.Stack {
     const hostedZone = HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
       zoneName: props.hostedZone.name,
       hostedZoneId: props.hostedZone.id,
+    });
+
+    const topic = new Topic(this, 'Notifications', {
+      topicName: 'FitbitLoggerNotifications',
+      displayName: 'FitbitLoggerNotifications',
     });
 
     const apiDomainName = `${props.subdomain}.${hostedZone.zoneName}`;

@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-import ResponseProcessor from './response-processor';
+import ResponseProcessor, { ILogRequest } from './response-processor';
 
 export default class TelegramApiClient {
   private readonly botToken: string;
@@ -39,7 +39,7 @@ export default class TelegramApiClient {
       .query(params);
   }
 
-  static getQueryParamsForFoodLog(message: string) {
+  static getQueryParamsForFoodLog(message: string): ILogRequest | null {
     return ResponseProcessor.fromMessage(message).toJSON();
   }
 }

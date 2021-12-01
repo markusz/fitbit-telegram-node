@@ -7,6 +7,22 @@ import { FitBitMealTypeIds, FitBitUnitIds } from '../config/constants';
 
 const MESSAGE_MAX_LINE_LENGTH = 37;
 
+export interface ILogRequest {
+  date: any;
+  amount: number;
+  mealTypeId: number;
+  unitId: number;
+}
+
+export interface ICalorieLogRequest extends ILogRequest {
+  foodName: any;
+  calories: number
+}
+
+interface IFoodLogRequest extends ILogRequest {
+  foodId: number;
+}
+
 export default class ResponseProcessor {
   config: any;
 
@@ -24,7 +40,6 @@ export default class ResponseProcessor {
   }
 
   static fromMessage(message: string) {
-    console.log(('hfjvjh'));
     return new ResponseProcessor(message);
   }
 
@@ -32,9 +47,8 @@ export default class ResponseProcessor {
     const timePattern = 'HH:mm:ss';
     const before = moment.tz(timeA, timePattern, 'Europe/Berlin');
     const after = moment.tz(timeB, timePattern, 'Europe/Berlin');
-    const isBetween = time.isBetween(before, after, undefined, inclusivity);
-    // console.log(time.format(), before.format(), after.format(), isBetween)
-    return isBetween;
+
+    return time.isBetween(before, after, undefined, inclusivity);
   }
 
   static getMealTypeByTime(time = moment.tz('Europe/Berlin')) {
@@ -67,30 +81,13 @@ export default class ResponseProcessor {
     return FitBitMealTypeIds.ANYTIME;
   }
 
-  toJSON() {
-    if (!this.isMatched()) {
-      return null;
-    }
-
-    const matchResult = this.message.text.match(this.config.meta[0]);
-    const logSpecifics = this.config.getLogSpecifics(matchResult);
-
-    if (this.config.meta[1] === Actions.LOG_FOOD) {
-      if (Array.isArray(logSpecifics[0])) {
-        return logSpecifics.map((ls: any) => ResponseProcessor.getLogRequestParamsForFood.apply(this, ls));
-      }
-
-      return ResponseProcessor.getLogRequestParamsForFood.apply(this, logSpecifics);
-    }
-
-    if (this.config.meta[1] === Actions.LOG_CALORIES) {
-      return ResponseProcessor.getLogRequestParamsForCalories.apply(this, logSpecifics);
-    }
-
-    return null;
-  }
-
-  static getLogRequestParamsForFood(amount: number, foodId: number, unitId = FitBitUnitIds.GRAMM, date = moment.tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
+  static getLogRequestParamsForFood(
+    amount: number,
+    foodId: number,
+    unitId = FitBitUnitIds.GRAMM,
+    date = moment.tz('Europe/Berlin').format('YYYY-MM-DD'),
+    mealTypeId = ResponseProcessor.getMealTypeByTime(),
+  ): IFoodLogRequest {
     return {
       amount,
       foodId,
@@ -104,7 +101,7 @@ export default class ResponseProcessor {
     return msg.padEnd(maxLength).slice(0, maxLength);
   }
 
-  static convertFoodLogJSONToUserFriendlyText(json:any) {
+  static convertFoodLogJSONToUserFriendlyText(json: any) {
     const horizontalSeparator = ' | ';
 
     const secondColumnLength = 4;
@@ -146,8 +143,7 @@ export default class ResponseProcessor {
     stringElements.push(separator);
     stringElements.push('```');
 
-    const logString = stringElements.join('\n');
-    return logString;
+    return stringElements.join('\n');
   }
 
   static getPossibleCommands() {
@@ -155,8 +151,15 @@ export default class ResponseProcessor {
     return `\`\`\`\n${messageParts.join('\n')}\n\`\`\``;
   }
 
-  static getLogRequestParamsForCalories(calories: number, foodName = moment.tz('Europe/Berlin')
-    .format('HH:mm'), amount = 1.00, unitId = FitBitUnitIds.UNIT, date = moment.tz('Europe/Berlin').format('YYYY-MM-DD'), mealTypeId = ResponseProcessor.getMealTypeByTime()) {
+  static getLogRequestParamsForCalories(
+    calories: number,
+    foodName = moment.tz('Europe/Berlin')
+      .format('HH:mm'),
+    amount = 1.00,
+    unitId = FitBitUnitIds.UNIT,
+    date = moment.tz('Europe/Berlin').format('YYYY-MM-DD'),
+    mealTypeId = ResponseProcessor.getMealTypeByTime(),
+  ): ICalorieLogRequest {
     return {
       foodName,
       unitId,
@@ -165,6 +168,29 @@ export default class ResponseProcessor {
       date,
       mealTypeId,
     };
+  }
+
+  toJSON(): ILogRequest | null {
+    if (!this.isMatched()) {
+      return null;
+    }
+
+    const matchResult = this.message.text.match(this.config.meta[0]);
+    const logSpecifics = this.config.getLogSpecifics(matchResult);
+
+    if (this.config.meta[1] === Actions.LOG_FOOD) {
+      if (Array.isArray(logSpecifics[0])) {
+        return logSpecifics.map((ls: any) => ResponseProcessor.getLogRequestParamsForFood.apply(this, ls));
+      }
+
+      return ResponseProcessor.getLogRequestParamsForFood.apply(this, logSpecifics);
+    }
+
+    if (this.config.meta[1] === Actions.LOG_CALORIES) {
+      return ResponseProcessor.getLogRequestParamsForCalories.apply(this, logSpecifics);
+    }
+
+    return null;
   }
 
   isMatched() {
