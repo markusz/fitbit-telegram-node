@@ -101,7 +101,7 @@ export default class ResponseProcessor {
     return msg.padEnd(maxLength).slice(0, maxLength);
   }
 
-  static convertFoodLogJSONToUserFriendlyText(json: any) {
+  static convertFoodLogJSONToUserFriendlyText(json: any, caloriesFromActivities: number = 0) {
     const horizontalSeparator = ' | ';
 
     const secondColumnLength = 4;
@@ -139,7 +139,10 @@ export default class ResponseProcessor {
 
     stringElements.push(separator);
     stringElements.push(`${ResponseProcessor.fitMsg('Consumed', firstColumnLength)}${horizontalSeparator}${status.toString().padStart(secondColumnLength)}${horizontalSeparator}${(status / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`);
-    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)}${horizontalSeparator}${(goal - status).toString().padStart(secondColumnLength)}${horizontalSeparator}${((goal - status) / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`);
+    if (caloriesFromActivities > 0) {
+      stringElements.push(`${ResponseProcessor.fitMsg('Activity', firstColumnLength)}${horizontalSeparator}${(caloriesFromActivities).toString().padStart(secondColumnLength)}${horizontalSeparator}${''.padStart(thirdColumnLength)}`);
+    }
+    stringElements.push(`${ResponseProcessor.fitMsg('Remaining', firstColumnLength)}${horizontalSeparator}${(goal + caloriesFromActivities - status).toString().padStart(secondColumnLength)}${horizontalSeparator}${((goal + caloriesFromActivities - status) / goal * 100).toFixed(percentDecimals).padStart(thirdColumnLength)}`);
     stringElements.push(separator);
     stringElements.push('```');
 

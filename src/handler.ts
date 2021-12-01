@@ -20,7 +20,6 @@ interface DynamoDBOAuthItem {
 
 const dynamoDbClient: DocumentClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
-  region: process.env.AWS_REGION,
 });
 
 const CORS_HEADERS = {
@@ -30,26 +29,38 @@ const CORS_HEADERS = {
 
 const MESSAGE_RETRIEVAL_CONFIRMATION = { statusCode: 200 };
 
-const storeAccessTokenInDynamoDB = (event: APIGatewayProxyEvent) => {
-  const accessToken = lodash.get(event, 'queryStringParameters.access_token');
-  const userId = lodash.get(event, 'queryStringParameters.user_id');
-  const chatId = parseInt(lodash.get(event, 'queryStringParameters.state'), 10);
+const storeAccessTokenInDynamoDB = (event: APIGatewayProxyEvent) => dynamoDbClient.put({
+  TableName: process.env.DYNAMODB_TABLE!,
+  Item: {
+    chatId: parseInt(event.queryStringParameters!.state!, 10),
+    userId: event.queryStringParameters!.user_id,
+    accessToken: event.queryStringParameters!.access_token,
+  },
+}).promise();
 
-  return dynamoDbClient.put({
-    TableName: process.env.DYNAMODB_TABLE!,
-    Item: {
-      chatId,
-      userId,
-      accessToken,
-    },
-  }).promise();
-};
-
-const getAccessTokenForChatId = (chatId: string) => dynamoDbClient.get({
+const getOAuthDetailsForChatId = (chatId: string) => dynamoDbClient.get({
   TableName: process.env.DYNAMODB_TABLE!,
   Key: {
     chatId,
   },
+}).promise();
+
+const logActivity = (calories: number, chatId: string) => dynamoDbClient.put({
+  TableName: process.env.LOG_TABLE!,
+  Item: {
+    pk: `Activity_${chatId}_${moment.tz('Europe/Berlin').format('YYYYMMDD')}`,
+    sk: Date.now().toString(),
+    calories,
+  },
+}).promise();
+
+const getActivities = (chatId: string, date: string = moment.tz('Europe/Berlin').format('YYYYMMDD')) => dynamoDbClient.query({
+  TableName: process.env.LOG_TABLE!,
+  KeyConditionExpression: 'pk = :pk',
+  ExpressionAttributeValues: {
+    ':pk': `Activity_${chatId}_${date}`,
+  },
+  ProjectionExpression: 'calories',
 }).promise();
 
 const makeOAuthURLForInitMessage = (telegramMessage: TelegramMessage) => {
@@ -83,10 +94,7 @@ export async function FitbitOAuthResponseHandler(event: APIGatewayProxyEvent) {
     console.log(request);
     return {
       statusCode: 200,
-      headers: {
-        'cache-control-header1': 1000,
-        'cache-control-header2': 1000,
-      },
+      headers: CORS_HEADERS,
     };
   } catch (e) {
     return {
@@ -100,8 +108,8 @@ export async function FitbitOAuthResponseHandler(event: APIGatewayProxyEvent) {
 export async function TelegramMealReminder() {
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, process.env.TELEGRAM_CHAT_ID!);
 
-  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID!);
-  const { accessToken } = dynamoDBItem.Item as DynamoDBOAuthItem;
+  const authInfoDbObject = await getOAuthDetailsForChatId(process.env.TELEGRAM_CHAT_ID!);
+  const { accessToken } = authInfoDbObject.Item as DynamoDBOAuthItem;
   console.log(accessToken);
 
   const foodLog = await new FitBitApiClient(accessToken).getFoodLog();
@@ -113,9 +121,9 @@ export async function TelegramMealReminder() {
 
 export async function SurplusTransferer() {
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, process.env.TELEGRAM_CHAT_ID!);
-  const dynamoDBItem = await getAccessTokenForChatId(process.env.TELEGRAM_CHAT_ID!);
+  const authInfoDbObject = await getOAuthDetailsForChatId(process.env.TELEGRAM_CHAT_ID!);
 
-  const { accessToken } = dynamoDBItem.Item as DynamoDBOAuthItem;
+  const { accessToken } = authInfoDbObject.Item as DynamoDBOAuthItem;
   const fitBitApiClient = new FitBitApiClient(accessToken);
 
   console.log(`accessToken=${accessToken}`);
@@ -149,13 +157,12 @@ export async function SurplusTransferer() {
 
 export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
   // SECURITY_TOKEN ensures that only calls from the Telegram Webhook are allowed
-  const token = lodash.get(event, 'pathParameters.token');
-  if (process.env.SECURITY_TOKEN !== token) {
-    console.error(`Request declined. token=${token}`);
+  if (process.env.SECURITY_TOKEN !== event.pathParameters!.token) {
+    console.error(`Request declined. token=${event.pathParameters!.token}`);
     return MESSAGE_RETRIEVAL_CONFIRMATION;
   }
 
-  const message = lodash.get(JSON.parse(event.body!), 'message');
+  const { message } = JSON.parse(event.body!);
 
   if (message === undefined) {
     console.log(`Failed to retrieve message from body ${JSON.parse(event.body!)}`);
@@ -164,39 +171,51 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
 
   const telegramMessage = TelegramMessage.getInstance(message);
 
-  console.log(`chatId=${telegramMessage.getChatId()}`);
-  console.log(`messageId=${telegramMessage.getMessageId()}`);
-  console.log(`message=${telegramMessage.getLowerCaseTextMessage()}`);
+  console.log(`chatId=${telegramMessage.getChatId()},messageId=${telegramMessage.getMessageId()},message=${telegramMessage.getLowerCaseTextMessage()}`);
 
-  const dynamoDBItem = await getAccessTokenForChatId(telegramMessage.getChatId());
+  const authInfoDbObject = await getOAuthDetailsForChatId(telegramMessage.getChatId());
   const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, telegramMessage.getChatId());
 
-  const { accessToken, userId } = dynamoDBItem.Item as DynamoDBOAuthItem;
+  const { accessToken, userId } = authInfoDbObject.Item as DynamoDBOAuthItem;
 
   console.log(`userId=${userId}`);
   console.log(`accessToken=${accessToken}`);
 
   const fitBitApiClient = new FitBitApiClient(accessToken);
-  const msg = telegramMessage.getLowerCaseTextMessage()!;
+  const rawTextMessage = telegramMessage.getLowerCaseTextMessage()!;
 
   try {
-    switch (msg) {
-      case msg.match(/^init$/)?.input: {
+    switch (rawTextMessage) {
+      // .match() returns null if not matching - .input is only defined when the RegExp matches
+      case rawTextMessage.match(/^init$/)?.input: {
         console.log('command=init-flow');
         const url = makeOAuthURLForInitMessage(telegramMessage);
         TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(url, false));
         break;
       }
-      case msg.match(/^commands$/)?.input: {
+      case rawTextMessage.match(/^aktiv (-?\d+)$/)?.input: {
+        console.log('command=activity');
+        const caloriesFromActivity = parseInt(rawTextMessage.match(/^aktiv (-?\d+)/)![1], 10);
+        await logActivity(caloriesFromActivity, telegramMessage.getChatId());
+        const activities = await getActivities(telegramMessage.getChatId());
+        const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
+        const foodLog = await fitBitApiClient.getFoodLog();
+        console.log(activities.Items);
+        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body, activityBalance)));
+        break;
+      }
+      case rawTextMessage.match(/^commands$/)?.input: {
         console.log('command=get-commands');
         const possibleCommands = ResponseProcessor.getPossibleCommands();
         TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(possibleCommands));
         break;
       }
-      case msg.match(/^log$/)?.input: {
+      case rawTextMessage.match(/^log$/)?.input: {
         console.log('command=get-log');
         const foodLog = await fitBitApiClient.getFoodLog();
-        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body)));
+        const activities = await getActivities(telegramMessage.getChatId());
+        const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
+        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body, activityBalance)));
         break;
       }
       default: {
@@ -205,7 +224,9 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
           console.log('command=log-item');
           await fitBitApiClient.logFood(queryParams);
           const logs = await fitBitApiClient.getFoodLog();
-          TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body)));
+          const activities = await getActivities(telegramMessage.getChatId());
+          const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
+          TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance)));
         } else {
           console.log('command=not-understood');
           TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat('```\nCommand not understood\n```'));

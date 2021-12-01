@@ -78,6 +78,19 @@ export default class FitbitLoggerStack extends cdk.Stack {
       },
     });
 
+    const logTable = new Table(this, 'LogTable', {
+      tableName: 'FitbitLogs',
+      removalPolicy: RemovalPolicy.DESTROY,
+      partitionKey: {
+        name: 'pk',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'sk',
+        type: AttributeType.STRING,
+      },
+    });
+
     const secrets = Secret.fromSecretNameV2(this, 'FitbitLoggerSecret', props.secretsName);
 
     const envVariables = {
@@ -86,6 +99,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
       SECURITY_TOKEN: secrets.secretValueFromJson('SECURITY_TOKEN').toString(),
       CLIENT_ID: secrets.secretValueFromJson('CLIENT_ID').toString(),
       DYNAMODB_TABLE: table.tableName,
+      LOG_TABLE: logTable.tableName,
       BASE_URL: apiDomainName,
     };
 
@@ -160,6 +174,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
       },
     });
 
+    logTable.grantReadWriteData(messageHandler);
     table.grantReadWriteData(messageHandler);
     table.grantReadWriteData(oauthHandler);
     table.grantReadWriteData(surplusTransferHandler);
