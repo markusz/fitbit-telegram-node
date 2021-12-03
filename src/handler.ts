@@ -197,7 +197,7 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
       case rawTextMessage.match(/^init$/)?.input: {
         console.log('command=init-flow');
         const url = makeOAuthURLForInitMessage(telegramMessage);
-        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(url, false));
+        await telegramApiClient.replyInTelegramChat(url, false);
         break;
       }
       case rawTextMessage.match(/^aktiv (-?\d+)$/)?.input: {
