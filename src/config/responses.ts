@@ -13,7 +13,26 @@ function numberAsStringToInt(numberAsString: string, multiplyWith = 1) {
   return Math.round(parseInt(numberAsString, 10) * multiplyWith);
 }
 
-const Responses = [
+class Definition {
+  private regex: RegExp;
+
+  private logType: number;
+
+  private name: string;
+
+  constructor(regex: RegExp, logType: number, name: string) {
+    this.logType = logType;
+    this.name = name;
+    this.regex = regex;
+  }
+}
+
+interface Response {
+  meta: (RegExp|string|number)[],
+  getLogSpecifics: (matchResult: string[]) => (string|number)[] | (string|number)[][]
+}
+
+const Responses: Response[] = [
   {
     meta: [/^(\d+) ([\u00C0-\u017Fa-zA-Z ]+)$/i, Actions.LOG_CALORIES, 'Calories with Name'],
     getLogSpecifics: (matchResult: string[]) => [numberAsStringToInt(matchResult[1]), startCase(matchResult[2])],
