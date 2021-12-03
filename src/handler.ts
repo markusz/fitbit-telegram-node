@@ -41,7 +41,7 @@ const storeAccessTokenInDynamoDB = (event: APIGatewayProxyEvent) => dynamoDbClie
 const getOAuthDetailsForChatId = (chatId: string) => dynamoDbClient.get({
   TableName: process.env.DYNAMODB_TABLE!,
   Key: {
-    chatId,
+    chatId: parseInt(chatId, 10),
   },
 }).promise();
 
