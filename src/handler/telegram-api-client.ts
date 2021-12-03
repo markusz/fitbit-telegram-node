@@ -22,7 +22,7 @@ export default class TelegramApiClient {
     console.log(`status=${superagentRes.status}, messageId=${superagentRes.body.result.message_id}`);
   }
 
-  replyInTelegramChat(message: string, formatted: boolean = true) {
+  async replyInTelegramChat(message: string, formatted: boolean = true) {
     console.log(`Replying to Telegram with message=${message}`);
     const params = {
       chat_id: this.chatId,
@@ -33,10 +33,14 @@ export default class TelegramApiClient {
       // @ts-ignore
       params.parse_mode = 'MarkdownV2';
     }
-    return superagent
+    const response = await superagent
       .get(`${this.baseURL}/sendMessage`)
       .set('Accept', 'application/json')
       .query(params);
+
+    TelegramApiClient.logTelegramAPIReply(response);
+
+    return response;
   }
 
   static getQueryParamsForFoodLog(message: string): ILogRequest | null {
