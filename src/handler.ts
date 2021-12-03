@@ -184,6 +184,13 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
   const fitBitApiClient = new FitBitApiClient(accessToken);
   const rawTextMessage = telegramMessage.getLowerCaseTextMessage()!;
 
+  async function getLogsAndActivity() {
+    const logs = await fitBitApiClient.getFoodLog();
+    const activities = await getActivities(telegramMessage.getChatId());
+    const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
+    return { logs, activityBalance };
+  }
+
   try {
     switch (rawTextMessage) {
       // .match() returns null if not matching - .input is only defined when the RegExp matches
@@ -197,25 +204,20 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
         console.log('command=activity');
         const caloriesFromActivity = parseInt(rawTextMessage.match(/^aktiv (-?\d+)/)![1], 10);
         await logActivity(caloriesFromActivity, telegramMessage.getChatId());
-        const activities = await getActivities(telegramMessage.getChatId());
-        const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
-        const foodLog = await fitBitApiClient.getFoodLog();
-        console.log(activities.Items);
-        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body, activityBalance)));
+        const { logs, activityBalance } = await getLogsAndActivity();
+        await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance));
         break;
       }
       case rawTextMessage.match(/^commands$/)?.input: {
         console.log('command=get-commands');
         const possibleCommands = ResponseProcessor.getPossibleCommands();
-        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(possibleCommands));
+        await telegramApiClient.replyInTelegramChat(possibleCommands);
         break;
       }
       case rawTextMessage.match(/^log$/)?.input: {
         console.log('command=get-log');
-        const foodLog = await fitBitApiClient.getFoodLog();
-        const activities = await getActivities(telegramMessage.getChatId());
-        const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
-        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(foodLog.body, activityBalance)));
+        const { logs, activityBalance } = await getLogsAndActivity();
+        TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance)));
         break;
       }
       default: {
@@ -223,13 +225,11 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
         if (queryParams !== null) {
           console.log('command=log-item');
           await fitBitApiClient.logFood(queryParams);
-          const logs = await fitBitApiClient.getFoodLog();
-          const activities = await getActivities(telegramMessage.getChatId());
-          const activityBalance = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
-          TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance)));
+          const { logs, activityBalance } = await getLogsAndActivity();
+          await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance));
         } else {
           console.log('command=not-understood');
-          TelegramApiClient.logTelegramAPIReply(await telegramApiClient.replyInTelegramChat('```\nCommand not understood\n```'));
+          await telegramApiClient.replyInTelegramChat('```\nCommand not understood\n```');
         }
         break;
       }
