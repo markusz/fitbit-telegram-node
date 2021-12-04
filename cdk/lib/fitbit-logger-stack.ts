@@ -175,6 +175,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
     });
 
     logTable.grantReadWriteData(messageHandler);
+    logTable.grantReadWriteData(surplusTransferHandler);
     table.grantReadWriteData(messageHandler);
     table.grantReadWriteData(oauthHandler);
     table.grantReadWriteData(surplusTransferHandler);

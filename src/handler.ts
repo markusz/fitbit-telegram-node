@@ -120,33 +120,39 @@ export async function TelegramMealReminder() {
 }
 
 export async function SurplusTransferer() {
-  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, process.env.TELEGRAM_CHAT_ID!);
-  const authInfoDbObject = await getOAuthDetailsForChatId(process.env.TELEGRAM_CHAT_ID!);
+  const chatId = process.env.TELEGRAM_CHAT_ID!;
+  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, chatId);
+  const authInfoDbObject = await getOAuthDetailsForChatId(chatId);
 
   const { accessToken } = authInfoDbObject.Item as DynamoDBOAuthItem;
   const fitBitApiClient = new FitBitApiClient(accessToken);
 
   console.log(`accessToken=${accessToken}`);
 
-  const yesterdayString = moment.tz('Europe/Berlin').subtract(1, 'days').format('YYYY-MM-DD');
-  console.log(`dayString=${yesterdayString}`);
-  const foodLogY = (await fitBitApiClient.getFoodLog(yesterdayString)).body;
-  console.log(foodLogY);
+  const yesterday = moment.tz('Europe/Berlin').subtract(1, 'days');
 
-  const loggedY = foodLogY.summary.calories;
-  const goalFromFoodLog = lodash.get(foodLogY, 'goals.calories', -1);
+  const yesterdayString = yesterday.format('YYYY-MM-DD');
+  const foodLogYesterday = (await fitBitApiClient.getFoodLog(yesterdayString)).body;
+
+  const kcalLoggedYesterday = foodLogYesterday.summary.calories;
+  console.log(`kcalLoggedYesterday=${kcalLoggedYesterday}`);
+  const goalFromFoodLog = lodash.get(foodLogYesterday, 'goals.calories', -1);
   if (goalFromFoodLog < 0) {
     console.log(`Calorie goal is missing in foodLog for ${yesterdayString}, querying goal API directly`);
   }
 
-  const goalY = goalFromFoodLog > 0 ? goalFromFoodLog : (await fitBitApiClient.getGoals()).body.goals.calories;
-  console.log(`goalY=${goalY}`);
-  const surplusY = loggedY - goalY;
-  console.log(`delta=${surplusY}`);
+  const kcalGoalYesterday = goalFromFoodLog > 0 ? goalFromFoodLog : (await fitBitApiClient.getGoals()).body.goals.calories;
+
+  const activities = await getActivities(chatId, yesterday.format('YYYYMMDD'));
+  const activityBalanceYesterday = activities.Items?.map((a) => a.calories).reduce((a, b) => a + b, 0);
+  console.log(`kcalGoalYesterday=${kcalGoalYesterday}`);
+  console.log(`activityBalance=${activityBalanceYesterday}`);
+  const kcalSurplusYesterday = kcalLoggedYesterday - (kcalGoalYesterday + activityBalanceYesterday);
+  console.log(`delta=${kcalSurplusYesterday}`);
 
   // <0 means in budget and no carry over required, >1000 indicates something irregular or forgot to log -> better handle this manually
-  if (surplusY > 0 && surplusY <= 1000) {
-    const queryParams = ResponseProcessor.getLogRequestParamsForCalories(surplusY, `∆ ${yesterdayString}`);
+  if (kcalSurplusYesterday > 0 && kcalSurplusYesterday <= 1000) {
+    const queryParams = ResponseProcessor.getLogRequestParamsForCalories(kcalSurplusYesterday, `∆ ${yesterdayString}`);
     await fitBitApiClient.logFood(queryParams);
     const logs = await fitBitApiClient.getFoodLog();
     await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body));
