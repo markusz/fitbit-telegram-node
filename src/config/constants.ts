@@ -46,9 +46,15 @@ const FitBitFoodIds = {
   },
   Salad: {
     EDEKA_KAESE_EI: 541881753,
+    BALSAMICO: 2636117,
+    SENF_MITTELSCAHRF: 537179480,
+
   },
   Vegetables: {
     KARTOFFELN_GEKOCHT: 537219908,
+    TOMATE: 537122441,
+    KOPFSALAT: 728020537,
+    PAPRIKA: 710378302,
   },
   Fruit: {
     APFEL: 2635276,

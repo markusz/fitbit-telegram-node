@@ -280,6 +280,25 @@ const Responses: Response[] = [
     ),
   },
   {
+    meta: [/^(gemischter salat|gs)$/i, Actions.LOG_FOOD, 'Gemischter Salat (Kopfsalat, Paprika Tomaten) ohne Dressing'],
+    getLogSpecifics: () => (
+      [
+        [300, FitBitFoodIds.Vegetables.KOPFSALAT, FitBitUnitIds.GRAMM],
+        [200, FitBitFoodIds.Vegetables.PAPRIKA, FitBitUnitIds.GRAMM],
+        [200, FitBitFoodIds.Vegetables.TOMATE, FitBitUnitIds.GRAMM],
+      ]
+    ),
+  },
+  {
+    meta: [/^(balsamicodressing)$/i, Actions.LOG_FOOD, 'Balsamicodressing für Salat (20g mittelscharfer Senf, 20g Balsamico)'],
+    getLogSpecifics: () => (
+      [
+        [20, FitBitFoodIds.Salad.BALSAMICO, FitBitUnitIds.ML],
+        [20, FitBitFoodIds.Salad.SENF_MITTELSCAHRF, FitBitUnitIds.GRAMM],
+      ]
+    ),
+  },
+  {
     meta: [/^subway$/i, Actions.LOG_FOOD, 'Subway standard 6ft'],
     getLogSpecifics: () => (
       [
