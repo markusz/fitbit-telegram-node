@@ -121,6 +121,8 @@ export default class ResponseProcessor {
     const goal = json.goals.calories;
     const status = json.summary.calories;
 
+    console.log(json.foods);
+
     let mealTypeId = -1;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < json.foods.length; i++) {
