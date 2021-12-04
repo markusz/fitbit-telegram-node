@@ -47,7 +47,7 @@ const FitBitFoodIds = {
   Salad: {
     EDEKA_KAESE_EI: 541881753,
     BALSAMICO: 2636117,
-    SENF_MITTELSCAHRF: 537179480,
+    SENF_MITTELSCAHRF: 537152456,
 
   },
   Vegetables: {
