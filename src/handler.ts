@@ -73,7 +73,7 @@ const makeOAuthURLForInitMessage = (telegramMessage: TelegramMessage) => {
 
 export async function StaticRedirectPage() {
   const template = await readFile('./index.html');
-  const htmlPage = template.toString().replace('BASE_URL', process.env.BASE_URL!);
+  const htmlPage = template.toString().replace(/BASE_URL/g, process.env.BASE_URL!);
 
   return {
     statusCode: 200,
