@@ -212,6 +212,16 @@ const Responses: Response[] = [
     ),
   },
   {
+    meta: [/^q (\d+)$/i, Actions.LOG_FOOD, 'Quark mager + 20% with müsli=$1'],
+    getLogSpecifics: (matchResult: string[]) => (
+      [
+        [500, FitBitFoodIds.Quark.FETT_MAGER],
+        [250, FitBitFoodIds.Quark.FETT_20],
+        [numberAsStringToInt(matchResult[1]), FitBitFoodIds.Muesli.DEFAULT],
+      ]
+    ),
+  },
+  {
     meta: [/^q (\d+) (\d+)$/i, Actions.LOG_FOOD, 'Quark mager=$1 with müsli=$2'],
     getLogSpecifics: (matchResult: string[]) => (
       [
