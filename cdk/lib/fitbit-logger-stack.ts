@@ -1,17 +1,17 @@
-import * as cdk from '@aws-cdk/core';
-import { RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
-import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
-import { ARecord, HostedZone, RecordTarget } from '@aws-cdk/aws-route53';
-import { DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
-import { ApiGatewayv2DomainProperties } from '@aws-cdk/aws-route53-targets';
-import { DomainName, HttpApi, HttpMethod } from '@aws-cdk/aws-apigatewayv2';
-import { LambdaProxyIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
-import { Runtime } from '@aws-cdk/aws-lambda';
-import { Rule, Schedule } from '@aws-cdk/aws-events';
-import { LambdaFunction } from '@aws-cdk/aws-events-targets';
-import { Secret } from '@aws-cdk/aws-secretsmanager';
-import { Topic } from '@aws-cdk/aws-sns';
+import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { ApiGatewayv2DomainProperties } from 'aws-cdk-lib/aws-route53-targets';
+import { DomainName, HttpApi, HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { Construct } from 'constructs';
 
 export interface FitbitLoggerStackProps extends StackProps {
   hostedZone: {
@@ -22,14 +22,14 @@ export interface FitbitLoggerStackProps extends StackProps {
   subdomain: string
 }
 
-export default class FitbitLoggerStack extends cdk.Stack {
+export default class FitbitLoggerStack extends Stack {
   private makeLambda(name: string, handler: string, envVariables: {
     [key: string]: string;
   }, desc?: string): NodejsFunction {
     return new NodejsFunction(this, name, {
       entry: '../src/handler.ts',
       handler,
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: name,
       description: desc ?? '',
@@ -37,7 +37,7 @@ export default class FitbitLoggerStack extends cdk.Stack {
     });
   }
 
-  constructor(scope: cdk.Construct, id: string, props: FitbitLoggerStackProps) {
+  constructor(scope: Construct, id: string, props: FitbitLoggerStackProps) {
     super(scope, id, props);
 
     const hostedZone = HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
@@ -45,17 +45,16 @@ export default class FitbitLoggerStack extends cdk.Stack {
       hostedZoneId: props.hostedZone.id,
     });
 
-    const topic = new Topic(this, 'Notifications', {
+    new Topic(this, 'Notifications', {
       topicName: 'FitbitLoggerNotifications',
       displayName: 'FitbitLoggerNotifications',
     });
 
     const apiDomainName = `${props.subdomain}.${hostedZone.zoneName}`;
 
-    const apiCert = new DnsValidatedCertificate(this, 'ApiCertificate', {
+    const apiCert = new Certificate(this, 'ApiCertificate', {
       domainName: apiDomainName,
-      hostedZone,
-      region: Stack.of(this).region,
+      validation: CertificateValidation.fromDns(hostedZone),
     });
 
     const domainName = new DomainName(this, 'DomainName', {
@@ -114,51 +113,56 @@ export default class FitbitLoggerStack extends cdk.Stack {
     const oauthHandler = new NodejsFunction(this, 'OAuthHandler', {
       entry: '../src/handler.ts',
       handler: 'FitbitOAuthResponseHandler',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: 'FitbitOAuthHandler',
       description: 'Handles OAuth requests from Fitbit',
       environment: envVariables,
+      depsLockFilePath: '../src/package-lock.json',
     });
 
     const messageHandler = new NodejsFunction(this, 'MessageHandler', {
       entry: '../src/handler.ts',
       handler: 'TelegramMessageHandler',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: 'FitbitMessageHandler',
       description: 'Handles messages from Fitbit',
       environment: envVariables,
+      depsLockFilePath: '../src/package-lock.json',
     });
 
     const fitbitBudgetReminderHandler = new NodejsFunction(this, 'BudgetReminder', {
       entry: '../src/handler.ts',
       handler: 'TelegramMealReminder',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: 'TelegramMealReminder',
       description: 'Reminds to log meals via Telegram',
       environment: envVariables,
+      depsLockFilePath: '../src/package-lock.json',
     });
 
     const surplusTransferHandler = new NodejsFunction(this, 'SurplusTransferHandler', {
       entry: '../src/handler.ts',
       handler: 'SurplusTransferer',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: 'SurplusTransferer',
       description: 'Transfers a calorie surplus to the next day',
       environment: envVariables,
+      depsLockFilePath: '../src/package-lock.json',
     });
 
     const staticPageHandler = new NodejsFunction(this, 'StaticRedirectPage', {
       entry: '../src/handler.ts',
       handler: 'StaticRedirectPage',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_18_X,
       memorySize: 256,
       functionName: 'StaticRedirectPage',
       description: 'Returns a static redirect page',
       environment: envVariables,
+      depsLockFilePath: '../src/package-lock.json',
       bundling: {
         commandHooks: {
           afterBundling(inputDir: string, outputDir: string): string[] {
@@ -184,25 +188,19 @@ export default class FitbitLoggerStack extends cdk.Stack {
     apiGw.addRoutes({
       path: '/im/telegram/{token}',
       methods: [HttpMethod.POST],
-      integration: new LambdaProxyIntegration({
-        handler: messageHandler,
-      }),
+      integration: new HttpLambdaIntegration('MessageHandlerIntegration', messageHandler),
     });
 
     apiGw.addRoutes({
       path: '/auth/fitbit',
       methods: [HttpMethod.GET],
-      integration: new LambdaProxyIntegration({
-        handler: oauthHandler,
-      }),
+      integration: new HttpLambdaIntegration('OAuthHandlerIntegration', oauthHandler),
     });
 
     apiGw.addRoutes({
       path: '/',
       methods: [HttpMethod.GET],
-      integration: new LambdaProxyIntegration({
-        handler: staticPageHandler,
-      }),
+      integration: new HttpLambdaIntegration('StaticPageHandlerIntegration', staticPageHandler),
     });
 
     const logReminder = new Rule(this, 'Reminder', {

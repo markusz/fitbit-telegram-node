@@ -10,35 +10,19 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.132.0",
-    "@types/node": "10.17.27",
+    "@types/node": "18.x",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
-    "aws-cdk": "1.132.0",
+    "aws-cdk": "2.x",
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.3",
-    "ts-node": "^9.0.0",
-    "typescript": "~3.9.7"
+    "ts-node": "^10.0.0",
+    "typescript": "~5.0.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-dynamodb": "1.132.0",
-    "@aws-cdk/aws-certificatemanager": "1.132.0",
-    "@aws-cdk/aws-lambda-nodejs": "1.132.0",
-    "@aws-cdk/aws-iam": "1.132.0",
-    "@aws-cdk/aws-lambda": "1.132.0",
-    "@aws-cdk/aws-lambda-event-sources": "1.132.0",
-    "@aws-cdk/aws-events": "1.132.0",
-    "@aws-cdk/aws-events-targets": "1.132.0",
-    "@aws-cdk/aws-apigatewayv2": "1.132.0",
-    "@aws-cdk/aws-apigatewayv2-authorizers": "1.132.0",
-    "@aws-cdk/aws-apigatewayv2-integrations": "1.132.0",
-    "@aws-cdk/aws-route53": "1.132.0",
-    "@aws-cdk/pipelines": "1.132.0",
-    "@aws-cdk/aws-secretsmanager": "1.132.0",
-    "@aws-cdk/aws-sns": "1.132.0",
-    "@aws-cdk/aws-route53-targets": "1.132.0",
-    "@aws-cdk/core": "1.132.0",
+    "aws-cdk-lib": "2.x",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.16"
   }
 }

@@ -20,3 +20,4 @@ fitbit-telegram-node.iml
 cdk.out
 /src/.nyc_output/
 /src/coverage/
+cdk/yarn.lock

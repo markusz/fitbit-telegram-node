@@ -176,11 +176,28 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
   }
 
   const telegramMessage = TelegramMessage.getInstance(message);
+  const rawTextMessage = telegramMessage.getLowerCaseTextMessage()!;
+  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, telegramMessage.getChatId());
+
+  if (rawTextMessage.match(/^init$/)?.input) {
+    console.log('command=init-flow');
+    const url = makeOAuthURLForInitMessage(telegramMessage);
+    return telegramApiClient.replyInTelegramChat(url, false);
+  }
+
+  if (rawTextMessage.match(/^commands$/)?.input) {
+    console.log('command=get-commands');
+    const possibleCommands = ResponseProcessor.getPossibleCommands();
+    return telegramApiClient.replyInTelegramChat(possibleCommands);
+  }
 
   console.log(`chatId=${telegramMessage.getChatId()},messageId=${telegramMessage.getMessageId()},message=${telegramMessage.getLowerCaseTextMessage()}`);
 
   const authInfoDbObject = await getOAuthDetailsForChatId(telegramMessage.getChatId());
-  const telegramApiClient = TelegramApiClient.getInstance(process.env.TELEGRAM_API_TOKEN!, telegramMessage.getChatId());
+
+  if (!authInfoDbObject.Item || !(authInfoDbObject.Item as DynamoDBOAuthItem).accessToken) {
+    return telegramApiClient.replyInTelegramChat('```\nAccess token not found\n```');
+  }
 
   const { accessToken, userId } = authInfoDbObject.Item as DynamoDBOAuthItem;
 
@@ -188,7 +205,6 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
   console.log(`accessToken=${accessToken}`);
 
   const fitBitApiClient = new FitBitApiClient(accessToken);
-  const rawTextMessage = telegramMessage.getLowerCaseTextMessage()!;
 
   async function getLogsAndActivity() {
     const logs = await fitBitApiClient.getFoodLog();
@@ -199,25 +215,12 @@ export async function TelegramMessageHandler(event: APIGatewayProxyEvent) {
 
   try {
     switch (rawTextMessage) {
-      // .match() returns null if not matching - .input is only defined when the RegExp matches
-      case rawTextMessage.match(/^init$/)?.input: {
-        console.log('command=init-flow');
-        const url = makeOAuthURLForInitMessage(telegramMessage);
-        await telegramApiClient.replyInTelegramChat(url, false);
-        break;
-      }
       case rawTextMessage.match(/^aktiv (-?\d+)$/)?.input: {
         console.log('command=activity');
         const caloriesFromActivity = parseInt(rawTextMessage.match(/^aktiv (-?\d+)/)![1], 10);
         await logActivity(caloriesFromActivity, telegramMessage.getChatId());
         const { logs, activityBalance } = await getLogsAndActivity();
         await telegramApiClient.replyInTelegramChat(ResponseProcessor.convertFoodLogJSONToUserFriendlyText(logs.body, activityBalance));
-        break;
-      }
-      case rawTextMessage.match(/^commands$/)?.input: {
-        console.log('command=get-commands');
-        const possibleCommands = ResponseProcessor.getPossibleCommands();
-        await telegramApiClient.replyInTelegramChat(possibleCommands);
         break;
       }
       case rawTextMessage.match(/^log$/)?.input: {
